@@ -1,6 +1,0 @@
-(defgroup momo ()
-  "Momo Softworks")
-
-(defcustom doom-modeline
-  (concat user-emacs-directory "modules/UI/doom-modeline.el"))
-

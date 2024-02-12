@@ -1,5 +1,0 @@
-(setq custom-safe-themes t)
-
-(use-package modus-themes
-  :config
-  (load-theme 'modus-vivendi-tinted))

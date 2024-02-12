@@ -1,5 +1,0 @@
-(momo/load "libraries/transient.el")
-
-(elpaca nil (use-package magit
-	      :ensure t
-	      :after transient))

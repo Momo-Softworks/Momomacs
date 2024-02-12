@@ -1,3 +1,0 @@
-(use-package paredit
-  :hook
-  (prog-mode . paredit-mode))

@@ -1,4 +1,0 @@
-(use-package general
-  :demand t)
-
-(elpaca-wait)

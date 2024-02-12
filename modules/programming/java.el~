@@ -1,4 +1,0 @@
-(use-package eglot-java
-    :after eglot
-    :hook
-    ((java-mode . eglot-java-mode)))
