@@ -1,5 +1,4 @@
 (use-package eglot
   :ensure nil
-  :if (executable-find "yay")
-  :ensure-system-package (jdtls . "yay -Sy --noconfirm jdtls")
+  :ensure-system-package jdtls
   :hook (java-mode . ensure-eglot))
