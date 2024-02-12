@@ -5,3 +5,7 @@
   (add-hook 'elpaca-after-init-hook
     (lambda ()
     (load-theme theme t))))
+
+;; Change package manager, depending on distro
+(if (executable-find "yay")
+    (momo/load "utils/yay"))
