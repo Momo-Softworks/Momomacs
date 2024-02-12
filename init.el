@@ -1,6 +1,9 @@
 ;; Elpaca
 (load (concat user-emacs-directory "modules/utils/elpaca"))
 
+;; Custom Variables
+(load (concat user-emacs-directory "momo"))
+
 ;; Utils
 (load (concat user-emacs-directory "modules/utils/loaders"))
 (load (concat user-emacs-directory "modules/utils/helpers"))
@@ -21,6 +24,9 @@
 (momo/load "defaults/yasnippet")
 (momo/load "defaults/eglot")
 
+;; Keybindings
+(load (concat user-emacs-directory "keybindings"))
+
 ;; UI
 (momo/load-doom-modeline)
 (momo/load-modus-themes)
@@ -28,6 +34,7 @@
 
 ;; Keybindings
 (momo/load-meow)
+(momo/load-which-key)
 
 ;; Completions
 (momo/load-vertico)

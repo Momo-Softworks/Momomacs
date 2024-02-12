@@ -70,3 +70,8 @@
   "Loads java-related packages"
   (interactive)
   (momo/load "programming/java"))
+
+(defun momo/load-which-key ()
+  "Loads which-key"
+  (interactive)
+  (momo/load "keybindings/which-key"))
