@@ -1,0 +1,4 @@
+(momo/load "libraries/transient.el")
+
+(use-package magit
+  :ensure t)

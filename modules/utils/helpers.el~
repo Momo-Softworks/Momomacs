@@ -1,0 +1,7 @@
+;; -*- lexical-binding: t -*-
+
+(defun momo/set-theme (theme)
+  (interactive)
+  (eval-after-load 'elpaca
+    '(lambda (theme)
+    (load-theme theme t))))
