@@ -50,3 +50,5 @@
                              (list '+elpaca-unload-seq 'elpaca--activate-package))))
 
 (use-package use-package-ensure-system-package)
+
+(elpaca-wait)
