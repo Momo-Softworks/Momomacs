@@ -1,4 +1,1 @@
-(use-package eglot
-  :ensure nil
-;  :ensure-system-package jdtls
-  :hook (java-mode . ensure-eglot))
+(add-hook 'java-mode-hook 'ensure-eglot)
