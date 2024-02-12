@@ -51,4 +51,3 @@
 
 (use-package use-package-ensure-system-package)
 
-(elpaca-wait)
