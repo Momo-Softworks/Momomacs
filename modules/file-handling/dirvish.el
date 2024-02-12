@@ -2,6 +2,6 @@
   (momo/load "libraries/transient.el"))
 
 (use-package dirvish
-  :after transient
+  :after dired
   :config
   (dirvish-override-dired-mode))

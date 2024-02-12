@@ -23,6 +23,8 @@
 (momo/load "defaults/paredit")
 (momo/load "defaults/yasnippet")
 (momo/load "defaults/eglot")
+(momo/load "defaults/marginalia")
+(momo/load "defaults/dired-hide-dotfiles")
 
 ;; Keybindings
 (load (concat user-emacs-directory "keybindings"))
@@ -43,7 +45,7 @@
 
 ;; File-handling
 (momo/load-pdf-tools)
-(momo/load-dirvish)
+;(momo/load-dirvish) ;; Slow when starting, for some reason...
 
 ;; Programming
 (momo/load-racket)
@@ -52,3 +54,6 @@
 ;; Project Management
 (momo/load-projectile)
 (momo/load-magit)
+
+;; Org
+(momo/load-org-modern)

@@ -75,3 +75,9 @@
   "Loads which-key"
   (interactive)
   (momo/load "keybindings/which-key"))
+
+(defun momo/load-org-modern ()
+  "Loads org-modern"
+  (interactive)
+  (momo/load "org/org-modern"))
+
