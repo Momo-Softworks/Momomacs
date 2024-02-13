@@ -81,3 +81,18 @@
   (interactive)
   (momo/load "org/org-modern"))
 
+(defun momo/load-flycheck ()
+  "Loads flycheck"
+  (interactive)
+  (momo/load "programming/flycheck"))
+
+(defun momo/load-copilot ()
+  "Loads copilot"
+  (interactive)
+  (momo/load "programming/copilot"))
+
+(defun momo/load-rainbow-delimiters ()
+  "Loads rainbow delimiters"
+  (interactive)
+  (momo/load "programming/rainbow-delimiters"))
+

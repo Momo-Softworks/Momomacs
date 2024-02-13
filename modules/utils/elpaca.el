@@ -47,6 +47,16 @@
 (elpaca `(seq :build ,(append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
                                           elpaca--pre-built-steps
                                         elpaca-build-steps))
-                             (list '+elpaca-unload-seq 'elpaca--activate-package))))
+                              (list '+elpaca-unload-seq 'elpaca--activate-package))))
+
+(defun +elpaca-unload-jsonrpc (e)
+  "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
+  (and (featurep 'jsonrpc) (unload-feature 'jsonrpc t))
+  (elpaca--continue-build e))
+(elpaca `(jsonrpc :build ,(append (butlast (if (file-exists-p (expand-file-name "jsonrpc" elpaca-builds-directory))
+                                              elpaca--pre-built-steps
+                                            elpaca-build-steps))
+                                 (list '+elpaca-unload-jsonrpc 'elpaca--activate-package))))
+
 
 (use-package use-package-ensure-system-package)
