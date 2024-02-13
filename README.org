@@ -1,0 +1,5 @@
+* Dependencies
+- the-silver-searcher (ag)
+- jdtls
+* How to use
+Clone the repository to either `.emacs.d/` or `.config/emacs`
