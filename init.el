@@ -8,6 +8,7 @@
 (load (concat user-emacs-directory "modules/utils/loaders"))
 (load (concat user-emacs-directory "modules/utils/helpers"))
 (load (concat user-emacs-directory "custom/minecraft"))
+(load (concat user-emacs-directory "custom/org"))
 
 ;; Settings
 (load (concat user-emacs-directory "settings"))
@@ -61,3 +62,5 @@
 
 ;; Org
 (momo/load-org-modern)
+(momo/load-org-roam)
+(momo/load-org-fragtog)

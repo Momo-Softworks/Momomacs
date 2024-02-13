@@ -1,6 +1,10 @@
 (use-package vertico
   :init
-  (vertico-mode))
+  (vertico-mode)
+  :general
+  (:keymaps 'vertico-map
+	    "C-j" 'vertico-next
+	    "C-k" 'vertico-previous))
 
 ;; A few more useful configurations...
 (use-package emacs

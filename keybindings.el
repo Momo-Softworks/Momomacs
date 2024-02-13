@@ -1,5 +1,6 @@
 (defconst momo/leader "C-c")
-
+(defconst momo/org-leader "C-c o")
+(defconst momo/roam-leader "C-c n")
 ;; Remove some annoying bindings
 
 (general-define-key
@@ -15,6 +16,26 @@
   "v" 'yank
   "y" 'undo-redo
   "z" 'undo)
+
+;; Org bindings
+
+(general-create-definer org-def
+  :prefix momo/org-leader)
+
+(org-def
+  "c" 'org-capture
+  "r" 'org-refile)
+
+;; Roam bindings
+
+(general-create-definer roam-def
+  :prefix momo/roam-leader)
+
+(roam-def
+  "f" 'org-roam-node-find
+  "c" 'org-roam-capture
+  "i" 'org-roam-node-insert
+  "j" 'org-roam-dailies-capture-today)
 
 
 ;; Dired bindings

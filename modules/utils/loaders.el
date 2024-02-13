@@ -79,7 +79,7 @@
 (defun momo/load-org-modern ()
   "Loads org-modern"
   (interactive)
-  (momo/load "org/org-modern"))
+  (momo/load "org/modern"))
 
 (defun momo/load-flycheck ()
   "Loads flycheck"
@@ -96,3 +96,12 @@
   (interactive)
   (momo/load "programming/rainbow-delimiters"))
 
+(defun momo/load-org-roam ()
+  "Loads org-roam"
+  (interactive)
+  (momo/load "org/roam"))
+
+(defun momo/load-org-fragtog ()
+  "Loads org-fragtog"
+  (interactive)
+  (momo/load "org/fragtog"))
