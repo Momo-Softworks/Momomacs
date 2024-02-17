@@ -1,3 +1,2 @@
-(use-package transient
-  :after seq)
+(use-package transient)
 

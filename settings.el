@@ -6,6 +6,13 @@
 (set-face-attribute 'default nil :height 120) ;; Bigger fonts
 
 ;; Move backups and auto-saves to emacs folder
+
+(unless (file-directory-p (concat user-emacs-directory "backups/"))
+  (make-directory (concat user-emacs-directory "backups/") 1))
+
+(unless (file-directory-p (concat user-emacs-directory "auto-saves/"))
+  (make-directory (concat user-emacs-directory "auto-saves/") 1))
+
 (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory))))
 (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "auto-saves/" user-emacs-directory) t)))
 

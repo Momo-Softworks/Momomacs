@@ -1,6 +1,7 @@
 (defconst momo/leader "C-c")
 (defconst momo/org-leader "C-c o")
 (defconst momo/roam-leader "C-c n")
+(defconst momo/lsp-leader "")
 ;; Remove some annoying bindings
 
 (general-define-key

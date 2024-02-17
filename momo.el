@@ -19,5 +19,7 @@
   :group 'momo)
 
 (unless (file-directory-p capture-directory)
-  (make-directory capture-directory))
+  (make-directory capture-directory 1))
 
+(unless (file-directory-p roam-directory)
+  (make-directory capture-directory 1))

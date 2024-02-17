@@ -20,6 +20,7 @@
 
 ;; Defaults
 (momo/load "defaults/general")
+(momo/load "defaults/treesitter-auto")
 (momo/load "defaults/savehist")
 (momo/load "defaults/smartparens")
 (momo/load "defaults/yasnippet")
