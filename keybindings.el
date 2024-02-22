@@ -12,11 +12,11 @@
 
 ;; Leader bindings
 (leader-def
-  "c" 'kill-ring-save
-  "x" 'kill-region
-  "v" 'yank
-  "y" 'undo-redo
-  "z" 'undo)
+  "C-c" 'kill-ring-save
+  "C-x" 'kill-region
+  "C-v" 'yank
+  "C-y" 'undo-redo
+  "C-z" 'undo)
 
 ;; Org bindings
 

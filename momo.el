@@ -23,3 +23,8 @@
 
 (unless (file-directory-p roam-directory)
   (make-directory capture-directory 1))
+
+(if (package-installed-p 'elfeed-tube)
+  (elfeed-tube-add-feeds '("Veritasium"
+                         "Tom Scott"
+                         "System Crafters")))

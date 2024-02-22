@@ -105,3 +105,8 @@
   "Loads org-fragtog"
   (interactive)
   (momo/load "org/fragtog"))
+
+(defun momo/load-elfeed ()
+  "Loads elfeed"
+  (interactive)
+  (momo/load "social/elfeed"))
