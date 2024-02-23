@@ -12,6 +12,7 @@
 			    "emacs-meow"
 			    "emacs-which-key"
 			    "emacs-vertico"
+			    "emacs-vertico-posframe"
 			    "emacs-corfu"
 			    "emacs-orderless"
 			    "emacs-pdf-tools"
@@ -25,5 +26,9 @@
 			    "emacs-org-modern"
 			    "emacs-org-roam"
 			    "emacs-org-fragtog"
-			    "emacs-elfeed"))
+			    "emacs-elfeed"
+			    ;"emacs-elfeed-tube"
+			    "emacs-cape"
+			    "emacs-yasnippet-snippets"))
 
+;; Momo channel has packages not defined in guix packages

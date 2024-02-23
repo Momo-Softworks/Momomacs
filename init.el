@@ -1,8 +1,10 @@
-;; Elpaca
-(load (concat user-emacs-directory "modules/utils/elpaca"))
-
 ;; Custom Variables
 (load (concat user-emacs-directory "momo"))
+
+;; Guix
+(load (concat user-emacs-directory "modules/utils/guix"))
+;; Elpaca
+(load (concat user-emacs-directory "modules/utils/elpaca"))
 
 ;; Utils
 (load (concat user-emacs-directory "modules/utils/loaders"))

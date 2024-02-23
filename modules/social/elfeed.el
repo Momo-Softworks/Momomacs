@@ -2,7 +2,8 @@
 
 ;; Optional
 
-(use-package elfeed-tube
+(unless use-guix
+  (use-package elfeed-tube
   :after elfeed
   :demand t
   :config
@@ -21,4 +22,4 @@
 (use-package elfeed-tube-mpv
   :bind (:map elfeed-show-mode-map
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
-              ("C-c C-w" . elfeed-tube-mpv-where)))
+              ("C-c C-w" . elfeed-tube-mpv-where))))

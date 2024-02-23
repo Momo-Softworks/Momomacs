@@ -41,24 +41,25 @@
 
 (elpaca-wait)
 
-(defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
-  (and (featurep 'seq) (unload-feature 'seq t))
-  (elpaca--continue-build e))
-(elpaca `(seq :build ,(append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
-                                          elpaca--pre-built-steps
-                                        elpaca-build-steps))
-                              (list '+elpaca-unload-seq 'elpaca--activate-package))))
+(unless use-guix
+  (defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
+	 (and (featurep 'seq) (unload-feature 'seq t))
+	 (elpaca--continue-build e))
+  (elpaca `(seq :build ,(append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
+                                             elpaca--pre-built-steps
+                                           elpaca-build-steps))
+				(list '+elpaca-unload-seq 'elpaca--activate-package))))
 
-(elpaca-wait)
+  (elpaca-wait)
 
-(defun +elpaca-unload-jsonrpc (e)
-  "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
-  (and (featurep 'jsonrpc) (unload-feature 'jsonrpc t))
-  (elpaca--continue-build e))
-(elpaca `(jsonrpc :build ,(append (butlast (if (file-exists-p (expand-file-name "jsonrpc" elpaca-builds-directory))
-                                              elpaca--pre-built-steps
-                                            elpaca-build-steps))
-                                 (list '+elpaca-unload-jsonrpc 'elpaca--activate-package))))
+  (defun +elpaca-unload-jsonrpc (e)
+    "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
+    (and (featurep 'jsonrpc) (unload-feature 'jsonrpc t))
+    (elpaca--continue-build e))
+  (elpaca `(jsonrpc :build ,(append (butlast (if (file-exists-p (expand-file-name "jsonrpc" elpaca-builds-directory))
+						 elpaca--pre-built-steps
+                                               elpaca-build-steps))
+                                    (list '+elpaca-unload-jsonrpc 'elpaca--activate-package))))
 
 
-(use-package use-package-ensure-system-package)
+  (use-package use-package-ensure-system-package))
