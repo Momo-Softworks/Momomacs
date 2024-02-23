@@ -110,3 +110,8 @@
   "Loads elfeed"
   (interactive)
   (momo/load "social/elfeed"))
+
+(defun momo/load-eat ()
+  "Loads eat"
+  (interactive)
+  (momo/load "system/eat"))

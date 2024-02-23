@@ -3,6 +3,11 @@
   :prefix "momo-"
   :group 'emacs)
 
+(defcustom use-guix nil
+  "Whether or not to use Guix as the primary project manager for Emacs"
+  :type 'boolean
+  :group 'momo)
+
 (defcustom projects (list (concat (getenv "HOME") "/Projects"))
   "Location of your projects"
   :type 'list

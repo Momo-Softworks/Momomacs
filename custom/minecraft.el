@@ -1,4 +1,5 @@
-(defun momo/minecraft-prepare-runs ()
+(with-eval-after-load 'projectile
+  (defun momo/minecraft-prepare-runs ()
     (interactive)
     (projectile-run-async-shell-command-in-root "./gradlew prepareRuns"))
 
@@ -12,4 +13,4 @@
 
   (defun momo/minecraft-build-jar ()
     (interactive)
-    (projectile-run-async-shell-command-in-root "./gradlew jar"))
+    (projectile-run-async-shell-command-in-root "./gradlew jar")))

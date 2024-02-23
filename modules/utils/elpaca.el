@@ -49,6 +49,8 @@
                                         elpaca-build-steps))
                               (list '+elpaca-unload-seq 'elpaca--activate-package))))
 
+(elpaca-wait)
+
 (defun +elpaca-unload-jsonrpc (e)
   "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
   (and (featurep 'jsonrpc) (unload-feature 'jsonrpc t))

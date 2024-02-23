@@ -3,6 +3,7 @@
 ;; If using Guix, use it for proper package management.
 (if use-guix
     (setq use-package-always-ensure nil)
+    (add-to-list 'load-path (string-append (getenv "GUIX_PROFILE") "/share/emacs"))
   (guix-emacs-autoload-packages))
 
 (defun momo/set-theme (theme)

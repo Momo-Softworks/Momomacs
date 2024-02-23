@@ -1,5 +1,4 @@
 (use-package projectile
-  :ensure t
   :after (general)
   :config
   (projectile-mode +1)

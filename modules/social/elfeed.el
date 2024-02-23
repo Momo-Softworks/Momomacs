@@ -3,7 +3,6 @@
 ;; Optional
 
 (use-package elfeed-tube
-  :ensure t ;; or :straight t
   :after elfeed
   :demand t
   :config
@@ -20,7 +19,6 @@
 
 
 (use-package elfeed-tube-mpv
-  :ensure t ;; or :straight t
   :bind (:map elfeed-show-mode-map
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
               ("C-c C-w" . elfeed-tube-mpv-where)))
