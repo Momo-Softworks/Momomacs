@@ -41,6 +41,8 @@
 
 (elpaca-wait)
 
+(load (concat user-emacs-directory "momo"))
+
 (unless use-guix
   (defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
 	 (and (featurep 'seq) (unload-feature 'seq t))

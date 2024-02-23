@@ -2,9 +2,9 @@
 
 ;; Optional
 
-(unless use-guix
-  (use-package elfeed-tube
+(use-package elfeed-tube
   :after elfeed
+  :ensure t
   :demand t
   :config
   ;; (setq elfeed-tube-auto-save-p nil) ; default value
@@ -12,14 +12,15 @@
   (elfeed-tube-setup)
 
   :bind (:map elfeed-show-mode-map
-         ("F" . elfeed-tube-fetch)
-         ([remap save-buffer] . elfeed-tube-save)
-         :map elfeed-search-mode-map
-         ("F" . elfeed-tube-fetch)
-         ([remap save-buffer] . elfeed-tube-save)))
+              ("F" . elfeed-tube-fetch)
+              ([remap save-buffer] . elfeed-tube-save)
+              :map elfeed-search-mode-map
+              ("F" . elfeed-tube-fetch)
+              ([remap save-buffer] . elfeed-tube-save)))
 
 
 (use-package elfeed-tube-mpv
+  :ensure t
   :bind (:map elfeed-show-mode-map
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
-              ("C-c C-w" . elfeed-tube-mpv-where))))
+              ("C-c C-w" . elfeed-tube-mpv-where)))

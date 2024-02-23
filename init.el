@@ -1,10 +1,11 @@
+;; Elpaca
+(load (concat user-emacs-directory "modules/utils/elpaca"))
+
 ;; Custom Variables
 (load (concat user-emacs-directory "momo"))
 
 ;; Guix
 (load (concat user-emacs-directory "modules/utils/guix"))
-;; Elpaca
-(load (concat user-emacs-directory "modules/utils/elpaca"))
 
 ;; Utils
 (load (concat user-emacs-directory "modules/utils/loaders"))
@@ -71,3 +72,16 @@
 ;; Social
 (momo/load-elfeed)
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(elfeed-feeds
+   '("https://www.youtube.com/feeds/videos.xml?channel_id=UCBa659QWEk1AI4Tg--mrJ2A" "https://www.youtube.com/feeds/videos.xml?channel_id=UCAiiOTio8Yu69c3XnR7nQBQ" "https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA")))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
