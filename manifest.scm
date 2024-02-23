@@ -1,4 +1,4 @@
-(specifications->manifest '("emacs-general"
+t(specifications->manifest '("emacs-general"
 			    ;"emacs-treesit-auto"
 			    "emacs-smartparens"
 			    "emacs-yasnippet"
@@ -29,6 +29,7 @@
 			    "emacs-elfeed"
 			    ;"emacs-elfeed-tube"
 			    "emacs-cape"
-			    "emacs-yasnippet-snippets"))
+			    "emacs-yasnippet-snippets"
+			    "emacs-eat"))
 
 ;; Momo channel has packages not defined in guix packages

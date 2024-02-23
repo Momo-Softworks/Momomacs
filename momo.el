@@ -28,8 +28,3 @@
 
 (unless (file-directory-p roam-directory)
   (make-directory capture-directory 1))
-
-(with-eval-after-load 'elfeed-tube
-  (elfeed-tube-add-feeds '("Veritasium"
-                         "Tom Scott"
-                         "System Crafters")))
