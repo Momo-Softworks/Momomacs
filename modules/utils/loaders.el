@@ -1,117 +1,62 @@
+(require 'cl-lib)
+
 (defgroup momo ()
   "Momo Softworks")
+
+(defun momo/get-package-directory (relative-path)
+  (concat user-emacs-directory "modules/" relative-path))
+
+(defun momo/defun-packages (package-list)
+  (cl-loop for (key . value) in package-list
+	   collect (cons key (momo/get-package-directory value))))
+
+
+
+(setq momo/packages-alist (momo/defun-packages '((elfeed . "social/elfeed")
+						 (doom-modeline . "UI/doom-modeline")
+						 (meow . "keybindings/meow")
+						 (vertico . "completions/vertico")
+						 (orderless . "completions/orderless")
+						 (pdf-tools . "file-handling/pdf-tools")
+						 (corfu . "completions/corfu")
+						 (dirvish . "file-handling/dirvish")
+						 (dashboard . "UI/dashboard")
+						 (racket . "programming/racket")
+						 (projectile . "project-management/projectile")
+						 (magit . "project-management/magit")
+						 (java . "programming/java")
+						 (which-key . "keybindings/which-key")
+						 (org-modern . "org/modern")
+						 (flycheck . "programming/flycheck")
+						 (copilot . "programming/copilot")
+						 (rainbow-delimiters . "programming/rainbow-delimiters")
+						 (org-roam . "org/roam")
+						 (org-fragtog . "org/fragtog")
+						 (eat . "system/eat")
+						 (exwm . "system/exwm")
+						 (modus-themes . "UI/modus-themes"))))
+
+(defun momo/load-packages (packages)
+  (mapcar (lambda (package)
+	    (unless (eq package nil)
+	      (if (eq (alist-get package momo/packages-alist) nil)
+		  (error "Can't find %s in momo/packages-alist" package)
+		(load (alist-get package momo/packages-alist)))
+	      )) packages))
 
 (defun momo/load (module)
   "Loads an elisp file in the modules directory"
   (interactive)
   (load (concat user-emacs-directory "modules/" module)))
 
-(defun momo/load-doom-modeline ()
-  "Loads Doom-modeline"
-  (interactive)
-  (momo/load "UI/doom-modeline"))
 
-(defun momo/load-meow ()
-  "Loads meow-mode"
-  (interactive)
-  (momo/load "keybindings/meow"))
-
-(defun momo/load-vertico ()
-  "Loads vertico"
-  (interactive)
-  (momo/load "completions/vertico"))
-
-(defun momo/load-orderless ()
-  "Loads orderless"
-  (interactive)
-  (momo/load "completions/orderless"))
-
-(defun momo/load-corfu ()
-  "Loads corfu"
-  (interactive)
-  (momo/load "completions/corfu"))
-
-(defun momo/load-modus-themes ()
-  "Loads modus-themes"
-  (interactive)
-  (momo/load "UI/modus-themes"))
-
-(defun momo/load-pdf-tools ()
-  "Loads pdf-tools"
-  (interactive)
-  (momo/load "file-handling/pdf-tools"))
-
-(defun momo/load-dirvish ()
-  "Loads dirvish"
-  (interactive)
-  (momo/load "file-handling/dirvish"))
-
-(defun momo/load-dashboard ()
-  "Loads dashboard"
-  (interactive)
-  (momo/load "UI/dashboard"))
-
-(defun momo/load-racket ()
-  "Loads racket-mode"
-  (interactive)
-  (momo/load "programming/racket"))
-
-(defun momo/load-projectile ()
-  "Loads projectile"
-  (interactive)
-  (momo/load "project-management/projectile"))
-
-(defun momo/load-magit ()
-  "Loads magit"
-  (interactive)
-  (momo/load "project-management/magit"))
-
-(defun momo/load-java ()
-  "Loads java-related packages"
-  (interactive)
-  (momo/load "programming/java"))
-
-(defun momo/load-which-key ()
-  "Loads which-key"
-  (interactive)
-  (momo/load "keybindings/which-key"))
-
-(defun momo/load-org-modern ()
-  "Loads org-modern"
-  (interactive)
-  (momo/load "org/modern"))
-
-(defun momo/load-flycheck ()
-  "Loads flycheck"
-  (interactive)
-  (momo/load "programming/flycheck"))
-
-(defun momo/load-copilot ()
-  "Loads copilot"
-  (interactive)
-  (momo/load "programming/copilot"))
-
-(defun momo/load-rainbow-delimiters ()
-  "Loads rainbow delimiters"
-  (interactive)
-  (momo/load "programming/rainbow-delimiters"))
-
-(defun momo/load-org-roam ()
-  "Loads org-roam"
-  (interactive)
-  (momo/load "org/roam"))
-
-(defun momo/load-org-fragtog ()
-  "Loads org-fragtog"
-  (interactive)
-  (momo/load "org/fragtog"))
-
-(defun momo/load-elfeed ()
-  "Loads elfeed"
-  (interactive)
-  (momo/load "social/elfeed"))
-
-(defun momo/load-eat ()
-  "Loads eat"
-  (interactive)
-  (momo/load "system/eat"))
+;; Defaults
+(momo/load "defaults/general")
+(momo/load "defaults/treesitter-auto")
+(momo/load "defaults/savehist")
+(momo/load "defaults/smartparens")
+(momo/load "defaults/yasnippet")
+(momo/load "defaults/eglot")
+(momo/load "defaults/marginalia")
+(momo/load "defaults/dired-hide-dotfiles")
+(momo/load "defaults/ag")
