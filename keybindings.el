@@ -5,7 +5,10 @@
 ;; Remove some annoying bindings
 
 (general-define-key
- "C-z" 'nil) ;; Removes Control-z minimizing Emacs window
+ "C-z" 'nil ;; Removes Control-z minimizing Emacs window
+ "C-x b" 'consult-buffer)
+
+
 
 (general-create-definer leader-def
   :prefix momo/leader)

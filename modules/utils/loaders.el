@@ -10,8 +10,6 @@
   (cl-loop for (key . value) in package-list
 	   collect (cons key (momo/get-package-directory value))))
 
-
-
 (setq momo/packages-alist (momo/defun-packages '((elfeed . "social/elfeed")
 						 (doom-modeline . "UI/doom-modeline")
 						 (meow . "keybindings/meow")

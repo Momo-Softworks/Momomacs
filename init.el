@@ -24,47 +24,49 @@
 
 ;; Packages
 
-(momo/load-packages
- '(
 
-   
-   
-   ;; UI
-   doom-modeline
-   modus-themes
-   dashboard
+(add-hook 'elpaca-after-init-hook (lambda ()
+				    (momo/load-packages
+				     '(
 
-   ;; Keybindings
-   meow
-   which-key
+				       ;; UI
+				       doom-modeline
+				       modus-themes
+				       dashboard
 
-   ;; Completions
-   vertico
-   corfu
-   orderless
+				       ;; Keybindings
+				       meow
+				       which-key
 
-   ;; File-Handling
-   pdf-tools
+				       ;; Completions
+				       vertico
+				       corfu
+				       orderless
 
-   ;; Programming
-   racket
-   java
-   flycheck
-   copilot
-   rainbow-delimiters
+				       ;; File-Handling
+				       pdf-tools
 
-   ;; Project Management
-   projectile
-   magit
+				       ;; Programming
+				       racket
+				       java
+				       flycheck
+				       copilot
+				       rainbow-delimiters
 
-   ;; Org
-   org-modern
-   org-roam
-   org-fragtog
+				       ;; Project Management
+				       projectile
+				       magit
 
-   ;;Social
-   elfeed
+				       ;; Org
+				       org-modern
+				       org-roam
+				       org-fragtog
 
+				       ;;Social
+				       elfeed
 
-   
-   ))
+				       ;; System
+				       exwm
+				       
+				       ))))
+

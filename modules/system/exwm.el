@@ -3,7 +3,7 @@
 
   ;; Make sure that dashboard.el is the initial buffer
   (if (package-installed-p 'dashboard)
-    (setq initial-buffer-choice #'dashboard-open))
+      (setq initial-buffer-choice #'dashboard-open))
   
   ;; Set the initial workspace number.
   (unless (get 'exwm-workspace-number 'saved-value)
@@ -51,6 +51,10 @@
 
   (setq mouse-autoselect-window t
 	focus-follows-mouse t)
+
+  
+  (add-hook 'exwm-floating-setup-hook (lambda () (setq mode-line-format nil))) ;; Remove mode-line from floating windows
+
   
   ;; No need to set window config, done in momo.el
   (require 'exwm-randr)
