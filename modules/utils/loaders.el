@@ -49,12 +49,19 @@
 
 
 ;; Defaults
-(momo/load "defaults/general")
-(momo/load "defaults/treesitter-auto")
-(momo/load "defaults/savehist")
-(momo/load "defaults/smartparens")
-(momo/load "defaults/yasnippet")
-(momo/load "defaults/eglot")
-(momo/load "defaults/marginalia")
-(momo/load "defaults/dired-hide-dotfiles")
-(momo/load "defaults/ag")
+(defun momo/load-defaults ()
+  "Load all default packages."
+  (let ((default-directory (concat user-emacs-directory "modules/defaults/")))
+    (normal-top-level-add-to-load-path '("."))
+    (normal-top-level-add-subdirs-to-load-path)
+    (mapc 'load (directory-files default-directory 't "^[^#.].*el$"))))
+;(momo/load "defaults/general")
+;(momo/load "defaults/consult")
+;(momo/load "defaults/treesitter-auto")
+;(momo/load "defaults/savehist")
+;(momo/load "defaults/smartparens")
+;(momo/load "defaults/yasnippet")
+;(momo/load "defaults/eglot")
+;(momo/load "defaults/marginalia")
+;(momo/load "defaults/dired-hide-dotfiles")
+;(momo/load "defaults/ag")

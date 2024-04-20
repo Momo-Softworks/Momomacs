@@ -13,60 +13,52 @@
 (load (concat user-emacs-directory "custom/minecraft"))
 (load (concat user-emacs-directory "custom/org"))
 
+;; Defaults
+
+(momo/load-defaults)
+
 ;; Settings
 (load (concat user-emacs-directory "settings"))
-
-;; Set theme
-(momo/set-theme 'modus-vivendi-tinted)
 
 ;; Keybindings
 (load (concat user-emacs-directory "keybindings"))
 
 ;; Packages
 
+(momo/load-packages
+      '(
+        ;; UI
+        doom-modeline
+        modus-themes
+        dashboard
+        ;; Keybindings
+        meow
+        which-key
+        ;; Completions
+        vertico
+        corfu
+        orderless
+        ;; File-Handling
+        pdf-tools
+        ;; Programming
+        racket
+        java
+        flycheck
+        copilot
+        rainbow-delimiters
+        ;; Project Management
+        projectile
+        magit
+        ;; Org
+        org-modern
+        org-roam
+        org-fragtog
+        ;;Social
+        elfeed
+        ;; System
+        exwm
+        ))
 
-(add-hook 'elpaca-after-init-hook (lambda ()
-				    (momo/load-packages
-				     '(
+(elpaca-wait)
 
-				       ;; UI
-				       doom-modeline
-				       modus-themes
-				       dashboard
-
-				       ;; Keybindings
-				       meow
-				       which-key
-
-				       ;; Completions
-				       vertico
-				       corfu
-				       orderless
-
-				       ;; File-Handling
-				       pdf-tools
-
-				       ;; Programming
-				       racket
-				       java
-				       flycheck
-				       copilot
-				       rainbow-delimiters
-
-				       ;; Project Management
-				       projectile
-				       magit
-
-				       ;; Org
-				       org-modern
-				       org-roam
-				       org-fragtog
-
-				       ;;Social
-				       elfeed
-
-				       ;; System
-				       exwm
-				       
-				       ))))
-
+(load-theme 'modus-vivendi-tinted t)

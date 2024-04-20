@@ -3,7 +3,7 @@
   :prefix "momo-"
   :group 'emacs)
 
-(defcustom use-guix t
+(defcustom use-guix nil
   "Whether or not to use Guix as the primary project manager for Emacs"
   :type 'boolean
   :group 'momo)
@@ -23,18 +23,18 @@
   :type 'string
   :group 'momo)
 
-(setopt exwm-randr-workspace-monitor-plist '(1 "HDMI-A-4"
-					       2 "HDMI-A-4"
-					       3 "HDMI-A-4"
-					       4 "HDMI-A-4"
-					       5 "HDMI-A-4"
-					       6 "DisplayPort-2"
-					       7 "DisplayPort-2"
-					       8 "DisplayPort-2"
-					       9 "DisplayPort-2"
-					       0 "DisplayPort-2"))
+(setopt exwm-randr-workspace-monitor-plist '(1 "DP1"
+					       2 "DP1"
+					       3 "DP1"
+					       4 "DP1"
+					       5 "DP1"
+					       6 "DP2-2"
+					       7 "DP2-2"
+					       8 "DP2-2"
+					       9 "DP2-2"
+					       0 "DP2-2"))
 
-(defcustom xrandr-command "xrandr --output HDMI-A-4 --set TearFree on --left-of DisplayPort-2 --set TearFree on --auto"
+(defcustom xrandr-command "xrandr --output DP1 --mode 2560x1440 --rate 119.87 --output DP2-2 --mode 2560x1440 --rate 60 --right-of DP1"
   "Xrandr command for your setup"
   :type 'string
   :group 'momo)
@@ -139,7 +139,7 @@
   (make-directory capture-directory 1))
 
 (unless (file-directory-p roam-directory)
-  (make-directory capture-directory 1))
+  (make-directory roam-directory 1))
 
 (defun momo/new-project ()
   "Create a new project using the supported facilities of Momomacs."
@@ -203,7 +203,7 @@
 
 (defun momo/list-desktop-applications ()
   "List applications from .desktop files in $XDG_DATA_DIRS/applications, returning a list of cons cells (name . command)."
-  (let ((data-dirs (split-string (getenv "XDG_DATA_DIRS") ":"))
+  (let ((data-dirs (split-string (or (getenv "XDG_DATA_DIRS") "/usr/local/share:/usr/share") ":"))
         (applications '()))
     (dolist (dir data-dirs applications)
       (let ((app-dir (concat dir "/applications")))
