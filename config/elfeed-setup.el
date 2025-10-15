@@ -1,7 +1,6 @@
 ;;; elfeed-setup.el --- Elfeed package setup and integration -*- lexical-binding: t; -*-
 
-(use-package elfeed
-  :config
+(with-eval-after-load 'elfeed
   (defun add-to-elfeed (value)
     (push value elfeed-feeds))
 
@@ -39,11 +38,7 @@
       (when link
 	(eww link)))))
 
-(use-package elfeed-tube
-  :after elfeed
-  :ensure t
-  :config
-
+(with-eval-after-load 'elfeed-tube
   (defun create-youtube-url (channel)
     (concat "https://www.youtube.com/@" channel))
 
