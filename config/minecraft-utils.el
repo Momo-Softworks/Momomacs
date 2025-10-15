@@ -1,3 +1,5 @@
+;;; minecraft-utils.el --- Minecraft project utilities -*- lexical-binding: t; -*-
+
 (with-eval-after-load 'projectile
   (defun momo/minecraft-prepare-runs ()
     (interactive)
@@ -14,3 +16,6 @@
   (defun momo/minecraft-build-jar ()
     (interactive)
     (projectile-run-async-shell-command-in-root "./gradlew jar")))
+
+(provide 'minecraft-utils)
+;;; minecraft-utils.el ends here

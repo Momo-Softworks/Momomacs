@@ -1,3 +1,5 @@
+;;; keybindings.el --- Keybinding definitions -*- lexical-binding: t; -*-
+
 (defconst momo/leader "C-c")
 (defconst momo/org-leader "C-c o")
 (defconst momo/roam-leader "C-c n")
@@ -47,3 +49,6 @@
 		    "H" 'dired-hide-dotfiles-mode
 		    "h" 'dired-up-directory
 		    "l" 'dired-find-file)
+
+(provide 'keybindings)
+;;; keybindings.el ends here
