@@ -59,7 +59,7 @@
         ;;Social
         elfeed
         ;; System
-        exwm
+        ;;exwm
         ))
 
 (elpaca-wait)

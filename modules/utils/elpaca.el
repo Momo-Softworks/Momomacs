@@ -65,5 +65,13 @@
 															 elpaca-build-steps))
 																					(list '+elpaca-unload-jsonrpc 'elpaca--activate-package))))
 
+    (elpaca-wait)
 
-  (use-package use-package-ensure-system-package))
+  (defun +elpaca-unload-transient (e)
+    "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
+    (and (featurep 'transient) (unload-feature 'transient t))
+    (elpaca--continue-build e))
+  (elpaca `(transient :build ,(append (butlast (if (file-exists-p (expand-file-name "transient" elpaca-builds-directory))
+															 elpaca--pre-built-steps
+															 elpaca-build-steps))
+																					(list '+elpaca-unload-transient 'elpaca--activate-package)))))
