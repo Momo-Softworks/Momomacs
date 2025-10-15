@@ -1,5 +1,41 @@
 * Dependencies
 - the-silver-searcher (ag)
 - jdtls
+
 * How to use
 Clone the repository to either `.emacs.d/` or `.config/emacs`
+
+* Project Structure
+** config/
+User configuration files and utilities:
+- ~user-config.el~ - Core user customization variables
+- ~exwm-config.el~ - EXWM window manager configuration
+- ~elfeed-config.el~ - RSS and YouTube feed configurations
+- ~project-utils.el~ - Project creation utilities
+- ~desktop-launcher.el~ - Desktop application launcher
+- ~minecraft-utils.el~ - Minecraft-specific project utilities
+- ~org-config.el~ - Org-mode capture and refile configuration
+- ~elfeed-setup.el~ - Elfeed package setup and integration
+- ~settings.el~ - General Emacs settings
+- ~keybindings.el~ - Keybinding definitions
+
+** modules/
+Package-specific configuration organized by category:
+- ~UI/~ - User interface packages (doom-modeline, modus-themes, dashboard)
+- ~completions/~ - Completion frameworks (vertico, corfu, orderless)
+- ~defaults/~ - Default packages loaded automatically
+- ~file-handling/~ - File management (pdf-tools, dirvish)
+- ~keybindings/~ - Keybinding packages (meow, which-key)
+- ~libraries/~ - Library packages (transient)
+- ~org/~ - Org-mode extensions (modern, roam, fragtog)
+- ~programming/~ - Programming language support
+- ~project-management/~ - Project tools (magit, projectile)
+- ~social/~ - Social/feed readers (elfeed)
+- ~system/~ - System integration (exwm, eat)
+- ~utils/~ - Utility functions and package managers (elpaca, guix, loaders)
+
+** Root files
+- ~init.el~ - Main initialization file
+- ~early-init.el~ - Early initialization
+- ~momo.el~ - Configuration loader that loads all config modules
+- ~manifest.scm~ - Guix package manifest
