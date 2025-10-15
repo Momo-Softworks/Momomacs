@@ -65,5 +65,6 @@
 															 elpaca-build-steps))
 																					(list '+elpaca-unload-jsonrpc 'elpaca--activate-package))))
 
+  (elpaca-wait)
 
-  (use-package use-package-ensure-system-package))
+  (elpaca use-package-ensure-system-package))
