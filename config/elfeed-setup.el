@@ -1,5 +1,5 @@
-;; -*- lexical-binding: t; -*-
-  
+;;; elfeed-setup.el --- Elfeed package setup and integration -*- lexical-binding: t; -*-
+
 (use-package elfeed
   :config
   (defun add-to-elfeed (value)
@@ -73,3 +73,6 @@
     (mapc #'process-youtube-channel (create-youtube-urls youtube-channel-urls)))
 
   (fetch-all-youtube-rss-urls))
+
+(provide 'elfeed-setup)
+;;; elfeed-setup.el ends here

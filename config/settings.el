@@ -1,3 +1,5 @@
+;;; settings.el --- General Emacs settings -*- lexical-binding: t; -*-
+
 (setq warning-suppress-log-types '((comp)))
 (setq native-comp-async-report-warnings-errors -1)
 (menu-bar-mode -1) ;; Disable menu bar
@@ -45,4 +47,7 @@
    " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
  org-agenda-current-time-string
  "◀── now ─────────────────────────────────────────────────")
+
+(provide 'settings)
+;;; settings.el ends here
 

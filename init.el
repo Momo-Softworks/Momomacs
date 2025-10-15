@@ -1,7 +1,7 @@
 ;; Elpaca
 (load (concat user-emacs-directory "modules/utils/elpaca"))
 
-;; Custom Variables
+;; Custom Variables and Configuration
 (load (concat user-emacs-directory "momo"))
 
 ;; Guix
@@ -10,18 +10,21 @@
 ;; Utils
 (load (concat user-emacs-directory "modules/utils/loaders"))
 (load (concat user-emacs-directory "modules/utils/helpers"))
-(load (concat user-emacs-directory "custom/minecraft"))
-(load (concat user-emacs-directory "custom/org"))
+
+;; Configuration modules
+(load (concat user-emacs-directory "config/minecraft-utils"))
+(load (concat user-emacs-directory "config/org-config"))
+(load (concat user-emacs-directory "config/elfeed-setup"))
 
 ;; Defaults
 
 (momo/load-defaults)
 
 ;; Settings
-(load (concat user-emacs-directory "settings"))
+(load (concat user-emacs-directory "config/settings"))
 
 ;; Keybindings
-(load (concat user-emacs-directory "keybindings"))
+(load (concat user-emacs-directory "config/keybindings"))
 
 ;; Packages
 

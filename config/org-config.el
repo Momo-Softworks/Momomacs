@@ -1,3 +1,5 @@
+;;; org-config.el --- Org-mode capture and refile configuration -*- lexical-binding: t; -*-
+
 (setq org-capture-templates
       `(("t" "Todo" entry (file+headline ,(concat capture-directory "/GTD/tasks.org") "Tasks")
          "* TODO %?\n  %i\n  %a")
@@ -36,3 +38,6 @@
 			   (,(concat capture-directory "/GTD/projects.org") :maxlevel . 9)
 			   (,(concat capture-directory "/GTD/delegated.org") :maxlevel . 9)
 			   (,(concat capture-directory "/GTD/trash.org") :maxlevel . 9)))
+
+(provide 'org-config)
+;;; org-config.el ends here
