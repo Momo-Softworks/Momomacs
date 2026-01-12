@@ -75,3 +75,13 @@
 															 elpaca--pre-built-steps
 															 elpaca-build-steps))
 																					(list '+elpaca-unload-transient 'elpaca--activate-package)))))
+
+(elpaca-wait)
+
+;; Fix for f package - explicitly specify files to include
+(elpaca '(f :files (:defaults "f.el")))
+
+(elpaca-wait)
+
+;; Fix for shrink-path package
+(elpaca 'shrink-path)

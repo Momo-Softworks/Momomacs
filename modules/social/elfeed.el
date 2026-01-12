@@ -6,16 +6,14 @@
 ;;; Code:
 
 (use-package elfeed
-  :demand t)
+  :defer t)
 
 ;; Optional YouTube integration
 
 (use-package elfeed-tube
   :after elfeed
-  :demand t
-  :config
-  (elfeed-tube-setup)
-
+  :defer t
+  :hook (elfeed-mode . elfeed-tube-setup)
   :bind (:map elfeed-show-mode-map
               ("F" . elfeed-tube-fetch)
               ([remap save-buffer] . elfeed-tube-save)
