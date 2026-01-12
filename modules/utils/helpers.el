@@ -1,10 +1,20 @@
-;; -*- lexical-binding: t -*-
+;;; helpers.el --- Utility helper functions -*- lexical-binding: t; -*-
 
-;; Add yay, and change if it's available.
-;;(elpaca nil (if (executable-find "yay")
-;;		(momo/load "utils/yay")))
+;;; Commentary:
+;; This file contains general utility functions used across the configuration.
 
-;;   (interactive)
-;;   (when (equal major-mode 'dired-mode)
-;;     (dired-mark-files-regexp "^\\.")
-;;     (dired-do-kill-lines)))
+;;; Code:
+
+(defun momo/reload-config ()
+  "Reload the Emacs configuration."
+  (interactive)
+  (load-file (expand-file-name "init.el" user-emacs-directory))
+  (message "Configuration reloaded!"))
+
+(defun momo/open-config ()
+  "Open the main init.el file."
+  (interactive)
+  (find-file (expand-file-name "init.el" user-emacs-directory)))
+
+(provide 'helpers)
+;;; helpers.el ends here

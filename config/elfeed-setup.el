@@ -7,7 +7,11 @@
   (defun add-list-to-elfeed (url-list)
     (mapcar #'add-to-elfeed url-list))
 
-  (add-list-to-elfeed rss-feeds)
+  ;; Initialize elfeed-feeds if not already set
+  (unless (boundp 'elfeed-feeds)
+    (setq elfeed-feeds '()))
+  
+  (add-list-to-elfeed momo-rss-feeds)
 
   (defun elfeed-v-mpv (url)
     "Watch a video from URL in MPV and catch errors to display in minibuffer."
@@ -67,19 +71,19 @@
   (defun fetch-all-youtube-rss-urls ()
     "Fetch RSS URLs for all provided YouTube channel URLs."
     (interactive)
-    (mapc #'process-youtube-channel (create-youtube-urls youtube-channel-urls))
+    (mapc #'process-youtube-channel (create-youtube-urls momo-youtube-channel-urls))
     (momo/save-youtube-channels-cache))
 
   (defun momo/youtube-channels-changed-p ()
     "Check if the YouTube channel list has changed since last fetch."
     (let ((cached-channels (momo/load-youtube-channels-cache)))
-      (not (equal (sort (copy-sequence youtube-channel-urls) #'string<)
+      (not (equal (sort (copy-sequence momo-youtube-channel-urls) #'string<)
                   (sort (copy-sequence cached-channels) #'string<)))))
 
   (defun momo/save-youtube-channels-cache ()
     "Save the current YouTube channel list to cache file."
     (with-temp-file momo/youtube-channels-cache-file
-      (prin1 youtube-channel-urls (current-buffer))))
+      (prin1 momo-youtube-channel-urls (current-buffer))))
 
   (defun momo/load-youtube-channels-cache ()
     "Load the cached YouTube channel list."

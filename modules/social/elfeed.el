@@ -1,14 +1,19 @@
-(use-package elfeed)
+;;; elfeed.el --- Elfeed RSS reader configuration -*- lexical-binding: t; -*-
 
-;; Optional
+;;; Commentary:
+;; Configuration for Elfeed RSS reader with YouTube integration via elfeed-tube.
+
+;;; Code:
+
+(use-package elfeed
+  :demand t)
+
+;; Optional YouTube integration
 
 (use-package elfeed-tube
   :after elfeed
-  :ensure t
   :demand t
   :config
-  ;; (setq elfeed-tube-auto-save-p nil) ; default value
-  ;; (setq elfeed-tube-auto-fetch-p t)  ; default value
   (elfeed-tube-setup)
 
   :bind (:map elfeed-show-mode-map
@@ -20,7 +25,9 @@
 
 
 (use-package elfeed-tube-mpv
-  :ensure t
   :bind (:map elfeed-show-mode-map
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
               ("C-c C-w" . elfeed-tube-mpv-where)))
+
+(provide 'elfeed)
+;;; elfeed.el ends here

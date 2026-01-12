@@ -1,12 +1,14 @@
+;;; loaders.el --- Package loading utilities -*- lexical-binding: t; -*-
+
 (require 'cl-lib)
 
-(defgroup momo ()
-  "Momo Softworks")
-
 (defun momo/get-package-directory (relative-path)
-  (concat user-emacs-directory "modules/" relative-path))
+  "Get the full path for a package configuration file at RELATIVE-PATH."
+  (expand-file-name (concat "modules/" relative-path) user-emacs-directory))
 
 (defun momo/defun-packages (package-list)
+  "Build an alist mapping package names to their configuration file paths.
+PACKAGE-LIST is an alist of (PACKAGE-SYMBOL . RELATIVE-PATH) pairs."
   (cl-loop for (key . value) in package-list
 	   collect (cons key (momo/get-package-directory value))))
 
@@ -26,42 +28,51 @@
 						 (which-key . "keybindings/which-key")
 						 (org-modern . "org/modern")
 						 (flycheck . "programming/flycheck")
-						 (copilot . "programming/copilot")
+						 (eca . "programming/eca")
 						 (rainbow-delimiters . "programming/rainbow-delimiters")
 						 (org-roam . "org/roam")
 						 (org-fragtog . "org/fragtog")
+						 (citeproc . "org/citeproc")
 						 (eat . "system/eat")
 						 (exwm . "system/exwm")
 						 (modus-themes . "UI/modus-themes"))))
 
 (defun momo/load-packages (packages)
+  "Load configuration files for each package in PACKAGES list.
+Each package must have an entry in `momo/packages-alist'."
   (mapcar (lambda (package)
 	    (unless (eq package nil)
-	      (if (eq (alist-get package momo/packages-alist) nil)
-		  (error "Can't find %s in momo/packages-alist" package)
-		(load (alist-get package momo/packages-alist)))
-	      )) packages))
+	      (let ((config-file (alist-get package momo/packages-alist)))
+		(if (not config-file)
+		    (error "Can't find %s in momo/packages-alist" package)
+		  (condition-case err
+		      (load config-file)
+		    (error (warn "Failed to load config for %s: %s" package err)))))))
+	  packages))
 
 (defun momo/load (module)
-  "Loads an elisp file in the modules directory"
-  (interactive)
-  (load (concat user-emacs-directory "modules/" module)))
+  "Load an elisp file MODULE from the modules directory.
+MODULE should be a relative path like \"utils/helpers\"."
+  (interactive "sModule to load: ")
+  (let ((module-path (expand-file-name (concat "modules/" module) user-emacs-directory)))
+    (condition-case err
+        (load module-path)
+      (error (warn "Failed to load module %s: %s" module err)))))
 
 
 ;; Defaults
 (defun momo/load-defaults ()
-  "Load all default packages."
-  (let ((default-directory (concat user-emacs-directory "modules/defaults/")))
-    (normal-top-level-add-to-load-path '("."))
-    (normal-top-level-add-subdirs-to-load-path)
-    (mapc 'load (directory-files default-directory 't "^[^#.].*el$"))))
-;(momo/load "defaults/general")
-;(momo/load "defaults/consult")
-;(momo/load "defaults/treesitter-auto")
-;(momo/load "defaults/savehist")
-;(momo/load "defaults/smartparens")
-;(momo/load "defaults/yasnippet")
-;(momo/load "defaults/eglot")
-;(momo/load "defaults/marginalia")
-;(momo/load "defaults/dired-hide-dotfiles")
-;(momo/load "defaults/ag")
+  "Load all default packages from the modules/defaults/ directory.
+Automatically loads all .el files in that directory."
+  (let ((default-directory (expand-file-name "modules/defaults/" user-emacs-directory)))
+    (when (file-directory-p default-directory)
+      (normal-top-level-add-to-load-path '("."))
+      (normal-top-level-add-subdirs-to-load-path)
+      (mapc (lambda (file)
+              (condition-case err
+                  (load file)
+                (error (warn "Failed to load default package %s: %s" file err))))
+            (directory-files default-directory 't "^[^#.].*\\.el$")))))
+
+(provide 'loaders)
+;;; loaders.el ends here

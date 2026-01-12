@@ -1,1 +1,1 @@
-(add-hook 'java-mode-hook 'eglot-ensure)
+(add-hook 'java-mode-hook #'eglot-ensure)

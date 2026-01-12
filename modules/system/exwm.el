@@ -1,9 +1,5 @@
 (use-package exwm
   :config
-
-  ;; Make sure that dashboard.el is the initial buffer
-  (if (package-installed-p 'dashboard)
-      (setq initial-buffer-choice #'dashboard-open))
   
   ;; Set the initial workspace number.
   (unless (get 'exwm-workspace-number 'saved-value)
@@ -29,19 +25,6 @@
                             (interactive)
                             (exwm-workspace-switch-create ,i))))
                       (number-sequence 0 9)))))
-  ;; Line-editing shortcuts
-  ;; (unless (get 'exwm-input-simulation-keys 'saved-value)
-  ;;   (setq exwm-input-simulation-keys
-  ;;         '(([?\C-b] . [left])
-  ;;           ([?\C-f] . [right])
-  ;;           ([?\C-p] . [up])
-  ;;           ([?\C-n] . [down])
-  ;;           ([?\C-a] . [home])
-  ;;           ([?\C-e] . [end])
-  ;;           ([?\M-v] . [prior])
-  ;;           ([?\C-v] . [next])
-  ;;           ([?\C-d] . [delete])
-  ;;           ([?\C-k] . [S-end delete]))))
 
   ;; Nice stuff
   (setq display-time-default-load-average nil)
@@ -61,7 +44,7 @@
   (add-hook 'exwm-randr-screen-change-hook
             (lambda ()
               (start-process-shell-command
-               "xrandr" nil xrandr-command)))
+               "xrandr" nil momo-xrandr-command)))
   (exwm-randr-enable)
 
   ;; Advise packages that use posframe for a multi-head setup

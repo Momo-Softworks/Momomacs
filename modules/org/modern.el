@@ -1,6 +1,8 @@
+;;; modern.el --- Org-modern styling configuration -*- lexical-binding: t; -*-
+
 (use-package org-modern
-  :hook
-  ((org-mode . org-modern-mode)
-   (org-agenda . org-modern-agenda))
   :config
   (global-org-modern-mode))
+
+(provide 'modern)
+;;; modern.el ends here

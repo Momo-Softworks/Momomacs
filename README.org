@@ -1,9 +1,36 @@
-* Dependencies
-- the-silver-searcher (ag)
-- jdtls
+#+TITLE: Momomacs - A Modular Emacs Configuration
+#+AUTHOR: Momo Softworks
+#+OPTIONS: toc:2 num:nil
 
-* How to use
-Clone the repository to either `.emacs.d/` or `.config/emacs`
+* Overview
+
+Momomacs is a well-organized, modular Emacs configuration using the Elpaca package manager. It features a clean separation of concerns with packages organized by category and loaded dynamically.
+
+* Dependencies
+
+** System Dependencies
+- ~the-silver-searcher~ (ag) - Fast code searching
+- ~jdtls~ - Java language server (if using Java)
+- ~git~ - Required for package management
+
+** Optional Dependencies
+- ~guix~ - If using Guix package manager integration
+- PDF rendering tools for pdf-tools
+
+* Installation
+
+Clone the repository to either =~/.emacs.d/= or =~/.config/emacs=:
+
+#+begin_src bash
+git clone <your-repo> ~/.config/emacs
+#+end_src
+
+On first launch, Emacs will automatically:
+1. Install Elpaca package manager
+2. Download and configure all packages
+3. Compile native code (if applicable)
+
+*Note:* First startup may take 2-5 minutes while packages install.
 
 * Project Structure
 ** config/
@@ -35,7 +62,352 @@ Package-specific configuration organized by category:
 - ~utils/~ - Utility functions and package managers (elpaca, guix, loaders)
 
 ** Root files
-- ~init.el~ - Main initialization file
-- ~early-init.el~ - Early initialization
+- ~init.el~ - Main initialization file, loads everything in order
+- ~early-init.el~ - Early initialization (GC settings, UI tweaks)
 - ~momo.el~ - Configuration loader that loads all config modules
+- ~custom.el~ - Auto-generated customizations (git-ignored)
 - ~manifest.scm~ - Guix package manifest
+
+* Load Order
+
+The configuration loads in this specific order to ensure dependencies are met:
+
+1. *early-init.el* - Before GUI initialization
+   - Increase GC threshold for faster startup
+   - Disable package.el in favor of Elpaca
+   - Set custom-file location
+   - Suppress compiler warnings
+
+2. *init.el* - Main initialization
+   - Load Elpaca package manager
+   - Load utility modules (loaders, helpers)
+   - Load Guix integration (if present)
+   - Load user configuration (momo.el)
+   - Load default packages from ~modules/defaults/~
+   - Load general settings
+   - Load specific config modules (org, elfeed, etc.)
+   - Load keybindings
+   - Load package configurations via ~momo/load-packages~
+   - Apply theme
+
+3. *momo.el* - User-specific configuration
+   - Load user customization variables
+   - Load optional modules (EXWM, elfeed, project-utils, etc.)
+
+* Key Bindings
+
+** Leader Keys
+- ~C-c m~ - Main leader (Momo commands)
+- ~C-c o~ - Org-mode operations
+- ~C-c n~ - Org-roam (notes)
+- ~C-c c~ - Configuration commands
+
+** Main Leader (C-c m)
+| Key | Command         | Description |
+|-----+-----------------+-------------|
+| c   | kill-ring-save  | Copy        |
+| x   | kill-region     | Cut         |
+| v   | yank            | Paste       |
+| z   | undo            | Undo        |
+| y   | undo-redo       | Redo        |
+
+** Configuration (C-c c)
+| Key | Command             | Description              |
+|-----+---------------------+--------------------------|
+| r   | momo/reload-config  | Reload configuration     |
+| o   | momo/open-config    | Open init.el             |
+
+** Org-mode (C-c o)
+| Key | Command     | Description       |
+|-----+-------------+-------------------|
+| c   | org-capture | Capture new item  |
+| r   | org-refile  | Refile current item |
+
+** Org-roam (C-c n)
+| Key | Command                         | Description           |
+|-----+---------------------------------+-----------------------|
+| f   | org-roam-node-find              | Find or create node   |
+| c   | org-roam-capture                | Capture to roam       |
+| i   | org-roam-node-insert            | Insert node link      |
+| j   | org-roam-dailies-capture-today  | Today's daily note    |
+
+** Other Bindings
+| Key   | Command               | Description                    |
+|-------+-----------------------+--------------------------------|
+| F5    | momo/reload-config    | Reload configuration           |
+| C-x b | consult-buffer        | Enhanced buffer switching      |
+| C-z   | nil                   | Disabled (was suspend-frame)   |
+
+** Dired Mode
+| Key | Command               | Description           |
+|-----+-----------------------+-----------------------|
+| H   | dired-hide-dotfiles   | Toggle dotfile hiding |
+| h   | dired-up-directory    | Go to parent dir      |
+| l   | dired-find-file       | Open file/dir         |
+
+* Customization
+
+** User Variables
+
+Edit ~config/user-config.el~ to customize these variables:
+
+- ~use-guix~ - Whether to use Guix package manager (default: ~nil~)
+- ~projects~ - List of project directories (default: ~'("~/Projects")~)
+- ~roam-directory~ - Location of org-roam notes (default: ~"~/Documents/Roam"~)
+- ~capture-directory~ - Location of org captures (default: ~"~/Documents/Org"~)
+
+** Adding a New Package
+
+1. *Create configuration file* in appropriate ~modules/~ subdirectory:
+
+#+begin_src elisp
+;;; package-name.el --- Package description -*- lexical-binding: t; -*-
+
+;;; Commentary:
+;; Brief description of what this package does
+
+;;; Code:
+
+(use-package package-name
+  :config
+  ;; your configuration here
+  )
+
+(provide 'package-name)
+;;; package-name.el ends here
+#+end_src
+
+2. *Register it* in ~modules/utils/loaders.el~:
+
+#+begin_src elisp
+(setq momo/packages-alist 
+  (momo/defun-packages 
+    '((package-name . "category/package-name")
+      ;; ... other packages
+      )))
+#+end_src
+
+3. *Add to load list* in ~init.el~:
+
+#+begin_src elisp
+(momo/load-packages
+  '(;; ... other packages
+    package-name
+    ))
+#+end_src
+
+** Adding Helper Functions
+
+Add custom functions to ~modules/utils/helpers.el~:
+
+#+begin_src elisp
+(defun momo/my-function ()
+  "My custom function description."
+  (interactive)
+  ;; your code here
+  )
+#+end_src
+
+* Package Management
+
+This configuration uses *Elpaca*, a modern, declarative package manager for Emacs.
+
+** Key Features
+- Asynchronous package installation
+- Integration with ~use-package~
+- Better dependency handling than ~package.el~
+- Support for package pinning and custom builds
+
+** Common Operations
+
+- *Install packages*: Restart Emacs (automatic on first load)
+- *Update packages*: ~M-x elpaca-update-all~
+- *Rebuild package*: ~M-x elpaca-rebuild~
+- *View package status*: ~M-x elpaca-manager~
+
+* Themes
+
+Currently using *Modus Vivendi Tinted* (dark theme).
+
+** Available Modus Variants
+- ~modus-vivendi~ - Dark theme
+- ~modus-vivendi-tinted~ - Dark theme with subtle tints (current)
+- ~modus-operandi~ - Light theme
+- ~modus-operandi-tinted~ - Light theme with subtle tints
+
+** Switching Themes
+
+#+begin_src elisp
+M-x load-theme RET modus-operandi RET  ; Switch to light theme
+#+end_src
+
+Or edit ~init.el~ to change the default theme.
+
+* Org-mode Configuration
+
+** Directories
+- *Roam notes*: ~~/Documents/Roam/~ (customizable via ~roam-directory~)
+- *Org captures*: ~~/Documents/Org/~ (customizable via ~capture-directory~)
+
+** Capture Templates
+
+| Key | Type     | Description                      |
+|-----+----------+----------------------------------|
+| t   | Todo     | Capture a task                   |
+| j   | Journal  | Journal entry with timestamp     |
+| i   | Idea     | Quick idea capture               |
+| T   | Tickler  | Future reminder/tickler item     |
+
+** GTD Refile Targets
+
+The configuration supports Getting Things Done workflow with these refile targets:
+- ~tasks.org~ - Active tasks
+- ~someday.org~ - Someday/maybe items
+- ~projects.org~ - Multi-step projects
+- ~delegated.org~ - Delegated tasks
+- ~trash.org~ - Archived/cancelled items
+
+** Org-mode Features
+- Auto-align tags disabled (modern clean look)
+- Hide emphasis markers (show styled text, not markup)
+- Pretty entities (render LaTeX symbols)
+- Indented startup
+- Custom agenda time grid with Unicode characters
+
+* Performance
+
+** Startup Optimizations
+- GC threshold increased to maximum during startup
+- Restored to 16MB after initialization
+- Native compilation enabled
+- Deferred package loading where appropriate
+- Backup files stored in dedicated directory
+
+** Typical Startup Time
+~1-2 seconds (varies by system and number of packages)
+
+View actual startup time in messages buffer after launch.
+
+* Installed Packages
+
+** UI
+- ~doom-modeline~ - Modern, minimal modeline
+- ~modus-themes~ - High-contrast accessible themes
+- ~dashboard~ - Startup screen with quick access
+
+** Completion
+- ~vertico~ - Vertical completion UI
+- ~vertico-posframe~ - Posframe display for vertico
+- ~corfu~ - In-buffer completion popup
+- ~cape~ - Completion-at-point extensions
+- ~orderless~ - Flexible completion style
+
+** Keybindings
+- ~meow~ - Modal editing (alternative to evil)
+- ~which-key~ - Display available keybindings
+- ~general~ - Convenient keybinding definitions
+
+** Programming
+- ~flycheck~ - On-the-fly syntax checking
+- ~eca~ - Editor Code Assistant
+- ~rainbow-delimiters~ - Colorize nested delimiters
+- ~racket-mode~ - Racket/Scheme support
+- ~java~ - Java development
+
+** Project Management
+- ~projectile~ - Project interaction library
+- ~magit~ - Git interface
+
+** Org-mode
+- ~org-modern~ - Modern org-mode appearance
+- ~org-roam~ - Note-taking and knowledge management
+- ~org-fragtog~ - Auto-toggle LaTeX fragments
+- ~citeproc~ - Citation processing
+
+** File Handling
+- ~pdf-tools~ - Enhanced PDF viewing
+
+** Social
+- ~elfeed~ - RSS/Atom feed reader
+- ~elfeed-tube~ - YouTube integration for elfeed
+
+** Defaults (Always Loaded)
+- ~savehist~ - Save minibuffer history
+- ~smartparens~ - Smart parenthesis handling
+- ~general~ - Keybinding management
+- ~consult~ - Enhanced search and navigation
+- ~marginalia~ - Annotations in minibuffer
+- ~dired-hide-dotfiles~ - Toggle dotfiles in dired
+- ~yasnippet~ - Snippet expansion
+- ~eglot~ - LSP client
+- ~treesitter-auto~ - Tree-sitter integration
+
+* Troubleshooting
+
+** Configuration Issues
+
+*** Reload Configuration
+#+begin_src elisp
+M-x momo/reload-config
+;; or press F5
+#+end_src
+
+*** Check for Errors
+Check the ~*Warnings*~ buffer for detailed error messages:
+#+begin_src elisp
+M-x switch-to-buffer RET *Warnings* RET
+#+end_src
+
+*** View Messages
+#+begin_src elisp
+M-x view-echo-area-messages
+#+end_src
+
+** Package Issues
+
+*** Rebuild a Package
+#+begin_src elisp
+M-x elpaca-rebuild RET package-name RET
+#+end_src
+
+*** View Package Status
+#+begin_src elisp
+M-x elpaca-manager
+#+end_src
+
+*** Reset Everything
+If things are completely broken:
+
+#+begin_src bash
+# Backup your config first!
+rm -rf ~/.config/emacs/elpaca/
+# Restart Emacs - packages will reinstall automatically
+#+end_src
+
+** Performance Issues
+
+*** Check Startup Time
+#+begin_src elisp
+M-x emacs-init-time
+#+end_src
+
+*** Profile Startup
+#+begin_src bash
+emacs -Q --eval "(progn (require 'profiler) (profiler-start 'cpu))" \
+  -l ~/.config/emacs/init.el \
+  --eval "(profiler-report)"
+#+end_src
+
+* Contributing
+
+This is a personal configuration, but you're welcome to:
+- Use it as inspiration for your own config
+- Fork and modify for your needs
+- Submit issues if you find bugs
+- Suggest improvements via pull requests
+
+* Acknowledgments
+
+- [[https://github.com/progfolio/elpaca][Elpaca]] - Modern package manager
+- [[https://protesilaos.com/emacs/modus-themes][Modus Themes]] - Beautiful, accessible themes
+- The Emacs community for excellent packages and documentation

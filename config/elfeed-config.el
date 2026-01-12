@@ -1,6 +1,6 @@
 ;;; elfeed-config.el --- Elfeed RSS and YouTube feeds configuration -*- lexical-binding: t; -*-
 
-(defcustom youtube-channel-urls '("Kyle.Gabriel"
+(defcustom momo-youtube-channel-urls '("Kyle.Gabriel"
 				  "Orthocast"
 				  "MentisWave"
 				  "Vercidium"
@@ -68,7 +68,7 @@
   :type 'list
   :group 'momo)
 
-(defcustom rss-feeds '("https://rsshub-production-7458.up.railway.app/twitter/user/crazyclipsonly/readable=1&showAuthorInTitle=1"
+(defcustom momo-rss-feeds '("https://rsshub-production-7458.up.railway.app/twitter/user/crazyclipsonly/readable=1&showAuthorInTitle=1"
 		      "https://rsshub-production-7458.up.railway.app/twitter/user/GlobalOrthodox/readable=1&showAuthorInTitle=1"
 		      "https://rsshub-production-7458.up.railway.app/twitter/user/FrankHassleYT/readable=1&showAuthorInTitle=1"
 		      "https://rsshub-production-7458.up.railway.app/twitter/user/Gentilenewsnet/readable=1&showAuthorInTitle=1"

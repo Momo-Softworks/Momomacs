@@ -18,8 +18,8 @@
 
 (defun momo/new-racket-project ()
   (let* ((project-name (completing-read "Project Name:" '())))
-    (mkdir (concat (car projects) "/" project-name))
-    (make-empty-file (concat (car projects) "/" project-name "/main.scm"))))
+    (mkdir (concat (car momo-projects) "/" project-name))
+    (make-empty-file (concat (car momo-projects) "/" project-name "/main.scm"))))
 
 (defun momo/new-java-project ()
   (let* ((options-and-functions
@@ -34,12 +34,12 @@
 
 (defun momo/new-java-gradle-project ()
   (let* ((project-name (completing-read "Project Name:" '())))
-    (mkdir (concat (car projects) "/" project-name))
+    (mkdir (concat (car momo-projects) "/" project-name))
     ))
 
 (defun momo/new-java-minecraft-project ()
   (let* ((project-name (completing-read "Project Name:" '())))
-    (mkdir (concat (car projects) "/" project-name))
+    (mkdir (concat (car momo-projects) "/" project-name))
     ))
 
 (provide 'project-utils)

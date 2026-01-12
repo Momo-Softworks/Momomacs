@@ -1,10 +1,18 @@
+;;; vertico.el --- Vertico completion configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+;; Configuration for Vertico minibuffer completion UI.
+
+;;; Code:
+
 (use-package vertico
+  :ensure (:wait t)
   :init
   (vertico-mode)
   :general
   (:keymaps 'vertico-map
-	    "C-j" 'vertico-next
-	    "C-k" 'vertico-previous))
+	    "C-j" #'vertico-next
+	    "C-k" #'vertico-previous))
 
 ;; A few more useful configurations...
 (use-package emacs
@@ -26,11 +34,6 @@
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
-
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
@@ -38,5 +41,9 @@
 
 
 (use-package vertico-posframe
+  :ensure (:wait t)
   :config
   (vertico-posframe-mode 1))
+
+(provide 'vertico)
+;;; vertico.el ends here

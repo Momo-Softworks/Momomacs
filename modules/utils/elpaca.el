@@ -43,9 +43,7 @@
 
 (elpaca-wait)
 
-(load (concat user-emacs-directory "momo"))
-
-(unless use-guix
+(unless momo-use-guix
   (defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
 	 (and (featurep 'seq) (unload-feature 'seq t))
 	 (elpaca--continue-build e))
@@ -56,6 +54,7 @@
 
   (elpaca-wait)
 
+  ;; Unload jsonrpc to avoid conflicts with built-in version
   (defun +elpaca-unload-jsonrpc (e)
     "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
     (and (featurep 'jsonrpc) (unload-feature 'jsonrpc t))
@@ -67,6 +66,7 @@
 
     (elpaca-wait)
 
+  ;; Unload transient to avoid conflicts with built-in version
   (defun +elpaca-unload-transient (e)
     "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
     (and (featurep 'transient) (unload-feature 'transient t))

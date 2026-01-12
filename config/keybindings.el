@@ -1,27 +1,42 @@
 ;;; keybindings.el --- Keybinding definitions -*- lexical-binding: t; -*-
 
-(defconst momo/leader "C-c")
-(defconst momo/org-leader "C-c o")
-(defconst momo/roam-leader "C-c n")
-(defconst momo/lsp-leader "")
-;; Remove some annoying bindings
+;;; Commentary:
+;; Global keybindings and leader key definitions.
+;; Using C-c m as main leader to avoid conflicts with major modes.
 
+;;; Code:
+
+;; Leader key definitions
+(defconst momo/leader "C-c m")      ; Main leader (m for momo)
+(defconst momo/org-leader "C-c o")  ; Org-mode leader
+(defconst momo/roam-leader "C-c n") ; Org-roam leader (n for notes)
+(defconst momo/config-leader "C-c c") ; Config leader
+
+;; Remove annoying default bindings
 (general-define-key
- "C-z" 'nil ;; Removes Control-z minimizing Emacs window
- "C-x b" 'consult-buffer)
+ "C-z" nil              ; Remove suspend-frame binding
+ "C-x b" #'consult-buffer
+ "<f5>" #'momo/reload-config)
 
-
-
+;; Create leader key definer
 (general-create-definer leader-def
   :prefix momo/leader)
 
-;; Leader bindings
+;; Main leader bindings (C-c m ...)
 (leader-def
-  "C-c" 'kill-ring-save
-  "C-x" 'kill-region
-  "C-v" 'yank
-  "C-y" 'undo-redo
-  "C-z" 'undo)
+  "c" #'kill-ring-save    ; Copy
+  "x" #'kill-region       ; Cut
+  "v" #'yank              ; Paste
+  "z" #'undo              ; Undo
+  "y" #'undo-redo)        ; Redo
+
+;; Config leader bindings (C-c c ...)
+(general-create-definer config-def
+  :prefix momo/config-leader)
+
+(config-def
+  "r" #'momo/reload-config
+  "o" #'momo/open-config)
 
 ;; Org bindings
 
@@ -29,8 +44,8 @@
   :prefix momo/org-leader)
 
 (org-def
-  "c" 'org-capture
-  "r" 'org-refile)
+  "c" #'org-capture
+  "r" #'org-refile)
 
 ;; Roam bindings
 
@@ -38,17 +53,17 @@
   :prefix momo/roam-leader)
 
 (roam-def
-  "f" 'org-roam-node-find
-  "c" 'org-roam-capture
-  "i" 'org-roam-node-insert
-  "j" 'org-roam-dailies-capture-today)
+  "f" #'org-roam-node-find
+  "c" #'org-roam-capture
+  "i" #'org-roam-node-insert
+  "j" #'org-roam-dailies-capture-today)
 
 
 ;; Dired bindings
 (general-define-key :keymaps 'dired-mode-map
-		    "H" 'dired-hide-dotfiles-mode
-		    "h" 'dired-up-directory
-		    "l" 'dired-find-file)
+		    "H" #'dired-hide-dotfiles-mode
+		    "h" #'dired-up-directory
+		    "l" #'dired-find-file)
 
 (provide 'keybindings)
 ;;; keybindings.el ends here

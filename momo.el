@@ -1,16 +1,24 @@
 ;;; momo.el --- Momomacs configuration loader -*- lexical-binding: t; -*-
 
-;; This file serves as the main entry point for Momomacs configuration.
-;; All specific configuration has been moved to appropriate files in the config/ directory.
+;;; Commentary:
+;; This file loads optional configuration modules that may depend on packages.
+;; All optional config files from the config/ directory are loaded here.
 
-;; Load core user configuration
-(load (concat user-emacs-directory "config/user-config"))
+;;; Code:
 
-;; Load additional configuration modules
-(load (concat user-emacs-directory "config/exwm-config"))
-(load (concat user-emacs-directory "config/elfeed-config"))
-(load (concat user-emacs-directory "config/project-utils"))
-(load (concat user-emacs-directory "config/desktop-launcher"))
+;; Load optional configuration modules
+(let ((config-dir (expand-file-name "config/" user-emacs-directory)))
+  (dolist (module '("exwm-config"
+                    "elfeed-config"
+                    "elfeed-setup"
+                    "project-utils"
+                    "desktop-launcher"
+                    "minecraft-utils"
+                    "org-config"))
+    (let ((module-file (expand-file-name module config-dir)))
+      (condition-case err
+          (load module-file)
+        (error (warn "Failed to load optional module %s: %s" module err))))))
 
 (provide 'momo)
 ;;; momo.el ends here

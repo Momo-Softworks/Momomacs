@@ -1,6 +1,6 @@
 ;;; exwm-config.el --- EXWM window manager configuration -*- lexical-binding: t; -*-
 
-(defcustom xrandr-command "xrandr --output DP1 --mode 2560x1440 --rate 119.87 --output DP2-2 --mode 2560x1440 --rate 60 --right-of DP1"
+(defcustom momo-xrandr-command "xrandr --output DP1 --mode 2560x1440 --rate 119.87 --output DP2-2 --mode 2560x1440 --rate 60 --right-of DP1"
   "Xrandr command for your setup"
   :type 'string
   :group 'momo)
