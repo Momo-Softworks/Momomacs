@@ -1,0 +1,23 @@
+# Emacs autosaves and backups
+auto-save-list/
+auto-saves/
+backups/
+*~
+\#*\#
+
+# Emacs Cache & History
+eln-cache/
+history
+recentf
+savehist
+tramp
+projectile-bookmarks.eld
+org-roam.db
+custom.el
+
+# Package Manager
+elpaca/
+
+# Local data/builds
+eca/
+tree-sitter/

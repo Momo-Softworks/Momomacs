@@ -26,4 +26,14 @@
 ;; Separate custom file from init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
+(defconst my-on-android (eq system-type 'android))
+
+(when my-on-android
+  (let ((termux-bin "/data/data/com.termux/files/usr/bin"))
+    ;; Force Emacs to look in Termux bin folder first
+    (setq exec-path (cons termux-bin exec-path))
+    (setenv "PATH" (concat termux-bin ":" (getenv "PATH")))
+    ;; Set Termux bash as the default shell
+    (setq explicit-shell-file-name (concat termux-bin "/bash"))))
+
 ;;; early-init.el ends here
