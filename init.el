@@ -87,6 +87,14 @@
 ;; Wait for all remaining packages to be installed and configured
 (elpaca-wait)
 
+;; EXWM is enabled only when Emacs is launched as the window manager — see
+;; ~/.local/bin/start-exwm (run by the exwm.desktop xsession), which exports
+;; EXWM_LAUNCH.  Gating on it keeps a normal Emacs and the emacs --fg-daemon
+;; from ever calling (exwm-enable).
+(when (getenv "EXWM_LAUNCH")
+  (momo/load-packages '(exwm))
+  (elpaca-wait))
+
 ;; Apply theme
 (load-theme 'modus-vivendi-tinted t)
 
