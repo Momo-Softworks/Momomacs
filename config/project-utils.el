@@ -8,7 +8,11 @@
 	   (when (package-installed-p 'java-mode)
 	     '("Java" . momo/new-java-project))
            (when (package-installed-p 'racket-mode)
-             '("Racket" . momo/new-racket-project))))
+             '("Racket" . momo/new-racket-project))
+           (when (executable-find (if (boundp 'packwiz-executable)
+                                      packwiz-executable
+                                    "packwiz"))
+             '("Modpack (packwiz)" . momo/new-packwiz-project))))
          (filtered-options-and-functions (seq-filter #'identity options-and-functions))
          (options (mapcar #'car filtered-options-and-functions))
          (project-type (completing-read "Project Type: " options))
@@ -20,6 +24,13 @@
   (let* ((project-name (completing-read "Project Name:" '())))
     (mkdir (concat (car momo-projects) "/" project-name))
     (make-empty-file (concat (car momo-projects) "/" project-name "/main.scm"))))
+
+(defun momo/new-packwiz-project ()
+  "Create a new packwiz modpack project and initialise it natively."
+  (let* ((project-name (read-string "Modpack Name: "))
+         (dir (expand-file-name project-name (car momo-projects))))
+    (make-directory dir t)
+    (packwiz-init dir)))
 
 (defun momo/new-java-project ()
   (let* ((options-and-functions

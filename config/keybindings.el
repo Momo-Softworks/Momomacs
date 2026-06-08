@@ -28,7 +28,8 @@
   "x" #'kill-region       ; Cut
   "v" #'yank              ; Paste
   "z" #'undo              ; Undo
-  "y" #'undo-redo)        ; Redo
+  "y" #'undo-redo         ; Redo
+  "k" #'packwiz-dispatch) ; packwiz modpack menu
 
 ;; Config leader bindings (C-c c ...)
 (general-create-definer config-def

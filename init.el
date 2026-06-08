@@ -76,7 +76,10 @@
    
    ;; Social
    elfeed
-   
+
+   ;; Gaming
+   packwiz
+
    ;; System (uncomment if needed)
    ;; exwm
    ))

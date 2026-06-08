@@ -35,6 +35,7 @@ PACKAGE-LIST is an alist of (PACKAGE-SYMBOL . RELATIVE-PATH) pairs."
 						 (citeproc . "org/citeproc")
 						 (eat . "system/eat")
 						 (exwm . "system/exwm")
+						 (packwiz . "gaming/packwiz")
 						 (modus-themes . "UI/modus-themes"))))
 
 (defun momo/load-packages (packages)
