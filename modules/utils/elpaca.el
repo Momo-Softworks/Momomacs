@@ -1,12 +1,12 @@
-(defvar elpaca-installer-version 0.11)
+(defvar elpaca-installer-version 0.12)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-sources-directory (expand-file-name "sources/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
                               :ref nil :depth 1 :inherit ignore
                               :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+                              :build (:not elpaca-activate)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-sources-directory))
        (build (expand-file-name "elpaca/" elpaca-builds-directory))
        (order (cdr elpaca-order))
        (default-directory repo))
@@ -43,43 +43,11 @@
 
 (elpaca-wait)
 
-(unless momo-use-guix
-  (defun +elpaca-unload-seq (e) "Unload seq before continuing the elpaca build, then continue to build the recipe E."
-	 (and (featurep 'seq) (unload-feature 'seq t))
-	 (elpaca--continue-build e))
-  (elpaca `(seq :build ,(append (butlast (if (file-exists-p (expand-file-name "seq" elpaca-builds-directory))
-                                             elpaca--pre-built-steps
-                                           elpaca-build-steps))
-			(list '+elpaca-unload-seq 'elpaca--activate-package))))
-
-  (elpaca-wait)
-
-  ;; Unload jsonrpc to avoid conflicts with built-in version
-  (defun +elpaca-unload-jsonrpc (e)
-    "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
-    (and (featurep 'jsonrpc) (unload-feature 'jsonrpc t))
-    (elpaca--continue-build e))
-  (elpaca `(jsonrpc :build ,(append (butlast (if (file-exists-p (expand-file-name "jsonrpc" elpaca-builds-directory))
-															 elpaca--pre-built-steps
-															 elpaca-build-steps))
-																					(list '+elpaca-unload-jsonrpc 'elpaca--activate-package))))
-
-    (elpaca-wait)
-
-  ;; Unload transient to avoid conflicts with built-in version
-  (defun +elpaca-unload-transient (e)
-    "Unload jsonrpc before continuing the elpaca build, then continue to build the recipe E."
-    (and (featurep 'transient) (unload-feature 'transient t))
-    (elpaca--continue-build e))
-  (elpaca `(transient :build ,(append (butlast (if (file-exists-p (expand-file-name "transient" elpaca-builds-directory))
-															 elpaca--pre-built-steps
-															 elpaca-build-steps))
-																					(list '+elpaca-unload-transient 'elpaca--activate-package)))))
-
-(elpaca-wait)
-
 ;; Fix for f package - explicitly specify files to include
 (elpaca '(f :files (:defaults "f.el")))
+
+;; Install transient explicitly so newer version shadows built-in (required by magit >= 4.x)
+(elpaca 'transient)
 
 (elpaca-wait)
 

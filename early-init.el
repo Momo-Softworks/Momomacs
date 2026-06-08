@@ -21,7 +21,8 @@
 
 ;; Suppress compiler warnings
 (setq native-comp-async-report-warnings-errors nil
-      warning-suppress-log-types '((comp)))
+      warning-suppress-log-types '((comp))
+      warning-suppress-types '((emacs)))
 
 ;; Separate custom file from init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

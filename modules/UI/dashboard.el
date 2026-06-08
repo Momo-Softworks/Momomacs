@@ -7,9 +7,8 @@
 
 (use-package dashboard
   :ensure (:wait t)
-  :init
-  (dashboard-setup-startup-hook)
   :config
+  (dashboard-setup-startup-hook)
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
   (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
   
