@@ -21,3 +21,7 @@ elpaca/
 # Local data/builds
 eca/
 tree-sitter/
+
+# Runtime caches & generated state
+url/
+packwiz-browse/

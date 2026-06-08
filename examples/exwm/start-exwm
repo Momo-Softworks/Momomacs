@@ -1,0 +1,24 @@
+#!/bin/sh
+# EXWM session launcher — run by the display manager via the exwm.desktop
+# xsession entry (~/.local/share/xsessions/exwm.desktop).
+#
+# The Emacs side is gated in init.el: it only loads the exwm module and calls
+# (exwm-enable) when EXWM_LAUNCH is set, so a normal Emacs or the
+# emacs --fg-daemon never tries to become the window manager.
+#
+# Install:
+#   cp examples/exwm/start-exwm ~/.local/bin/start-exwm && chmod +x ~/.local/bin/start-exwm
+
+# Enable EXWM in *this* Emacs process only.
+export EXWM_LAUNCH=1
+
+# Expose the X session environment to `systemd --user` so any auxiliary daemons
+# bound to graphical-session.target (picom, safeeyes, …) can reach the display.
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl --user import-environment DISPLAY XAUTHORITY
+    systemctl --user start graphical-session.target 2>/dev/null || true
+fi
+
+# Hand off to Emacs as the window manager.  (xrandr is driven from inside EXWM
+# via exwm-randr + momo-xrandr-command, so it is not needed here.)
+exec emacs
