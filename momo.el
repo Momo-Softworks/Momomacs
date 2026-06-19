@@ -14,7 +14,8 @@
                     "project-utils"
                     "desktop-launcher"
                     "minecraft-utils"
-                    "org-config"))
+                    "org-config"
+                    "eww-config"))
     (let ((module-file (expand-file-name module config-dir)))
       (condition-case err
           (load module-file)

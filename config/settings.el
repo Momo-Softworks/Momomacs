@@ -66,6 +66,9 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
+;; Browser / eww configuration now lives in config/eww-config.el
+;; (loaded via momo.el).
+
 (provide 'settings)
 ;;; settings.el ends here
 

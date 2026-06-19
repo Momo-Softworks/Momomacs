@@ -56,9 +56,12 @@
    
    ;; File handling
    pdf-tools
+   visual-fill-column
+   shrface
    
    ;; Programming
    racket
+   geiser
    java
    flycheck
    eca
@@ -67,6 +70,7 @@
    ;; Project management
    projectile
    magit
+   envrc
    
    ;; Org-mode
    org-modern
@@ -81,7 +85,7 @@
    packwiz
 
    ;; System (uncomment if needed)
-   ;; exwm
+   ;;exwm
    ))
 
 ;; Wait for all remaining packages to be installed and configured

@@ -37,4 +37,13 @@
     ;; Set Termux bash as the default shell
     (setq explicit-shell-file-name (concat termux-bin "/bash"))))
 
+;; Put GNU Guix profiles on PATH/exec-path even when Emacs is launched from a
+;; graphical session (which never sources ~/.bashrc).  Without this, envrc/direnv
+;; and Geiser cannot find `guix`, `direnv` or the project's `guile`.
+(dolist (guix-bin (list (expand-file-name "~/.config/guix/current/bin")
+                        (expand-file-name "~/.guix-profile/bin")))
+  (when (file-directory-p guix-bin)
+    (add-to-list 'exec-path guix-bin)
+    (setenv "PATH" (concat guix-bin path-separator (getenv "PATH")))))
+
 ;;; early-init.el ends here

@@ -8,6 +8,7 @@ backups/
 # Emacs Cache & History
 eln-cache/
 history
+transient/history.el
 recentf
 savehist
 tramp
