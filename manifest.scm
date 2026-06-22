@@ -70,8 +70,16 @@
    "emacs-eat"
 
    ;; --- TeX toolchain: org-fragtog + eww LaTeX math rendering ---
+   ;; scheme-basic is too minimal for Org's preview preamble; these cover the
+   ;; packages Org includes in math fragments (color/graphicx, amsmath,
+   ;; amssymb, ulem).  Emacs also needs GUIX_TEXMF set so `latex' finds this
+   ;; tree -- see modules/utils/guix.el.
    "texlive-scheme-basic"
-   "texlive-dvisvgm"))
+   "texlive-dvisvgm"
+   "texlive-graphics"     ;graphicx + color
+   "texlive-amsmath"
+   "texlive-amsfonts"     ;amssymb
+   "texlive-ulem"))
 
 ;;; ---------------------------------------------------------------------------
 ;;; Referenced by the config but NOT packaged in Guix (current channels).

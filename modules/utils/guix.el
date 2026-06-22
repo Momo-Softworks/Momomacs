@@ -24,6 +24,14 @@
 ;; module's use-package form is expanded, so the check below is accurate.
 (guix-emacs-autoload-packages)
 
+;; LaTeX (org-fragtog / eww math preview) shells out to `latex', which needs
+;; GUIX_TEXMF to locate its texmf tree and format files.  That var is exported
+;; by the profile's etc/profile at login, but a GUI-launched Emacs may not have
+;; inherited it; set it for our subprocesses if missing.
+(let ((texmf (expand-file-name "~/.guix-home/profile/share/texmf-dist")))
+  (when (and (not (getenv "GUIX_TEXMF")) (file-directory-p texmf))
+    (setenv "GUIX_TEXMF" texmf)))
+
 (defun momo/package-on-load-path-p (name)
   "Non-nil if package NAME is already available (Guix-installed or built-in)."
   (and (locate-library (format "%s" name)) t))
