@@ -10,7 +10,10 @@
   :config
   (dashboard-setup-startup-hook)
   (add-hook 'elpaca-after-init-hook #'dashboard-insert-startupify-lists)
-  (add-hook 'elpaca-after-init-hook #'dashboard-initialize)
+  ;; `dashboard-initialize' only exists in some dashboard versions (e.g. not in
+  ;; Guix's dashboard 1.8.0); guard so this works on either backend.
+  (when (fboundp 'dashboard-initialize)
+    (add-hook 'elpaca-after-init-hook #'dashboard-initialize))
   
   ;; Set dashboard as initial buffer for emacsclient frames
   (setq initial-buffer-choice #'dashboard-open)

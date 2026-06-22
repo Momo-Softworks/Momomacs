@@ -13,8 +13,24 @@
   :prefix "momo-"
   :group 'emacs)
 
-(defcustom momo-use-guix nil
-  "Whether or not to use Guix as the primary project manager for Emacs"
+(defcustom momo-use-guix
+  (cond
+   ;; Explicit override wins: MOMO_USE_GUIX=1/0 (or yes/no, true/false).
+   ((getenv "MOMO_USE_GUIX")
+    (not (member (downcase (getenv "MOMO_USE_GUIX"))
+                 '("" "0" "no" "false" "nil"))))
+   ;; Otherwise auto-detect: a Guix System with the `guix' command available
+   ;; uses the manifest backend; everyone else gets Elpaca.
+   (t (and (executable-find "guix")
+           (file-directory-p "/run/current-system"))))
+  "Whether to use Guix (manifest.scm) as the Emacs package backend.
+When non-nil, packages come from `guix-emacs-autoload-packages' and
+use-package does not :ensure; when nil, Elpaca installs them.
+
+Auto-detected per machine so Guix and non-Guix org members share this
+config unchanged: t on a Guix System where `guix' is on PATH, nil
+otherwise.  Override with the MOMO_USE_GUIX environment variable
+(\"1\"/\"0\") or by customizing this variable."
   :type 'boolean
   :group 'momo)
 
