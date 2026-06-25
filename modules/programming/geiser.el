@@ -37,34 +37,3 @@
 
 (use-package geiser-guile
   :after geiser)
-
-;; Phase 2: Prevent geiser's internal font-lock buffers from stealing focus.
-;; Three functions use set-buffer on internal temp buffers, triggering
-;; scheme-mode-hook (geiser-mode, geiser-kawa-capf-setup, etc.) in those
-;; buffers.  Wrap them all with save-window-excursion.
-(with-eval-after-load 'geiser-autodoc
-  (advice-add 'geiser-autodoc--str :around
-    (lambda (orig &rest args)
-      (save-current-buffer
-        (save-window-excursion
-          (apply orig args))))))
-
-;; Safety net: if a geiser internal buffer ever becomes current in the
-;; selected window, switch back immediately.
-(add-hook 'buffer-list-update-hook
-  (lambda ()
-    (let ((buf (window-buffer (selected-window))))
-      (when (and (string-match-p "\\` \\*Geiser" (buffer-name buf))
-                 (not (derived-mode-p 'geiser-repl-mode buf)))
-        (switch-to-buffer (other-buffer buf t))))))
-(with-eval-after-load 'geiser-syntax
-  (advice-add 'geiser-syntax--scheme-str :around
-    (lambda (orig &rest args)
-      (save-current-buffer
-        (save-window-excursion
-          (apply orig args)))))
-  (advice-add 'geiser-syntax--fontify-syntax-region :around
-    (lambda (orig &rest args)
-      (save-current-buffer
-        (save-window-excursion
-          (apply orig args))))))
