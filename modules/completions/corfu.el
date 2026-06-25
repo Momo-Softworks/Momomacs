@@ -11,7 +11,7 @@
   (corfu-cycle t)           ; Enable cycling for next/previous
   (corfu-auto t)            ; Enable auto completion
   (corfu-auto-prefix 2)     ; Minimum prefix length for auto completion
-  (corfu-auto-delay 0)      ; No delay for auto completion
+  (corfu-auto-delay 0.3)    ; Debounce — geiser REPL needs time per keystroke
   :init
   (global-corfu-mode))
 

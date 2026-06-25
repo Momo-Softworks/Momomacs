@@ -38,14 +38,3 @@
 
 (use-package geiser-guile
   :after geiser)
-
-;; Prevent geiser's internal font-lock buffer from stealing focus during
-;; Corfu completions.  The fontification function calls set-buffer on the
-;; hidden font-lock buffer, which confuses completion-at-point.
-;; save-current-buffer + save-window-excursion contain the damage.
-(with-eval-after-load 'geiser-syntax
-  (advice-add 'geiser-syntax--fontify-syntax-region :around
-              (lambda (orig start end)
-                (save-current-buffer
-                  (save-window-excursion
-                    (funcall orig start end))))))
