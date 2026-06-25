@@ -36,10 +36,11 @@
 
    ;; --- Programming ---
    "emacs-geiser"             ;modules/programming/geiser.el
-   "emacs-geiser-guile"       ;  "
+   "emacs-geiser-guile"       ;  ""
    "emacs-racket-mode"
    "emacs-flycheck"
    "emacs-rainbow-delimiters"
+   "emacs-parinfer-rust-mode"
    "emacs-eglot"              ;NOTE: Emacs ships eglot built-in; this only
                               ;shadows it with a newer version.  java.el uses
                               ;eglot-ensure.  Drop if you don't need newer.
@@ -94,6 +95,13 @@
 ;;;   emacs-elfeed-tube-mpv   modules/social/elfeed.el (companion to elfeed-tube)
 ;;;   emacs-packwiz           modules/gaming/packwiz.el (Momo channel?)
 ;;;   emacs-dired-hide-dotfiles  modules/defaults/ (loaded unconditionally)
+;;;
+;;; Packages that ARE provided as Guix custom packages (in ~/.config/guix/modules/)
+;;; and wired into home-configuration.scm (NOT in manifest.scm since they aren't
+;;; in upstream channels):
+;;;
+;;;   emacs-parinfer-rust-mode   modules/programming/parinfer-rust.el
+;;;      (propagates parinfer-rust-emacs, the Rust shared library)
 ;;;
 ;;; Conditional — only loaded for an EXWM session (init.el gates on
 ;;; EXWM_LAUNCH).  AVAILABLE in Guix as "emacs-exwm" but pulls an X11 stack,

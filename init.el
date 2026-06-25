@@ -49,44 +49,47 @@
 (elpaca-wait)
 
 ;; Now load the rest (these can defer as needed)
-(momo/load-packages
- '(;; Keybindings
-   meow
-   which-key
-   
-   ;; File handling
-   pdf-tools
-   visual-fill-column
-   shrface
-   
-   ;; Programming
-   racket
-   geiser
-   java
-   flycheck
-   eca
-   rainbow-delimiters
-   
-   ;; Project management
-   projectile
-   magit
-   envrc
-   
-   ;; Org-mode
-   org-modern
-   org-roam
-   org-fragtog
-   citeproc
-   
-   ;; Social
-   elfeed
+   (momo/load-packages
+    '(;; Keybindings
+      meow
+      which-key
+      
+      ;; File handling
+      pdf-tools
+      visual-fill-column
+      shrface
+      dirvish
+      
+      ;; Programming
+      racket
+      geiser
+      kawa
+      java
+      flycheck
+      eca
+      rainbow-delimiters
+      parinfer-rust
+      
+      ;; Project management
+      projectile
+      magit
+      envrc
+      
+      ;; Org-mode
+      org-modern
+      org-roam
+      org-fragtog
+      citeproc
+      
+      ;; Social
+      elfeed
 
-   ;; Gaming
-   packwiz
+      ;; Gaming
+      packwiz
 
-   ;; System (uncomment if needed)
-   ;;exwm
-   ))
+      ;; System (uncomment if needed)
+      ;;exwm
+      ))
 
 ;; Wait for all remaining packages to be installed and configured
 (elpaca-wait)

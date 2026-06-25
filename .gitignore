@@ -18,6 +18,9 @@ custom.el
 
 # Package Manager
 elpaca/
+.cask/
+elpa/
+geiser-history*
 
 # Local data/builds
 eca/

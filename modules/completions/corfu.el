@@ -10,7 +10,7 @@
   :custom
   (corfu-cycle t)           ; Enable cycling for next/previous
   (corfu-auto t)            ; Enable auto completion
-  (corfu-auto-prefix 1)     ; Minimum prefix length for auto completion
+  (corfu-auto-prefix 2)     ; Minimum prefix length for auto completion
   (corfu-auto-delay 0)      ; No delay for auto completion
   :init
   (global-corfu-mode))
