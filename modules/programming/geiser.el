@@ -37,3 +37,12 @@
 
 (use-package geiser-guile
   :after geiser)
+
+;; Safety net: if geiser internal buffer steals the selected window,
+;; switch back immediately.
+(add-hook 'buffer-list-update-hook
+  (lambda ()
+    (let ((buf (window-buffer (selected-window))))
+      (when (and (string-match-p "\\` \\*Geiser" (buffer-name buf))
+                 (not (derived-mode-p 'geiser-repl-mode buf)))
+        (switch-to-buffer (other-buffer buf t))))))
