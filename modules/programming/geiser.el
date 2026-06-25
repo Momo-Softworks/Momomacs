@@ -48,6 +48,15 @@
       (save-current-buffer
         (save-window-excursion
           (apply orig args))))))
+
+;; Safety net: if a geiser internal buffer ever becomes current in the
+;; selected window, switch back immediately.
+(add-hook 'buffer-list-update-hook
+  (lambda ()
+    (let ((buf (window-buffer (selected-window))))
+      (when (and (string-match-p "\\` \\*Geiser" (buffer-name buf))
+                 (not (derived-mode-p 'geiser-repl-mode buf)))
+        (switch-to-buffer (other-buffer buf t))))))
 (with-eval-after-load 'geiser-syntax
   (advice-add 'geiser-syntax--scheme-str :around
     (lambda (orig &rest args)
