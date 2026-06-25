@@ -34,7 +34,9 @@
                         f)
                      f))
                  completion-at-point-functions)))
-  (add-hook 'geiser-mode-hook #'momo/geiser--wrap-capf))
+  ;; Temporarily disabled to debug font-lock focus issue
+  ;; (add-hook 'geiser-mode-hook #'momo/geiser--wrap-capf)
+  )
 
 (use-package geiser-guile
   :after geiser)
