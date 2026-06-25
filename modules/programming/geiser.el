@@ -51,3 +51,25 @@
 
 (use-package geiser-guile
   :after geiser)
+
+;; Prevent geiser's internal font-lock buffer from stealing focus during
+;; Corfu completions.  geiser-syntax--fontify-syntax-region calls set-buffer
+;; on the font-lock buffer, which can confuse completion-at-point.
+;; We wrap it to save and restore the current buffer and selected window.
+(add-to-list 'display-buffer-alist
+             '(" \\*Geiser font-lock\\*"
+               (display-buffer-no-window)
+               (allow-no-window . t)))
+
+(with-eval-after-load 'geiser-syntax
+  (defvar momo/geiser--orig-fontify
+    (symbol-function 'geiser-syntax--fontify-syntax-region))
+  (defun geiser-syntax--fontify-syntax-region (start end)
+    "Like original, but preserves current buffer and window."
+    (let ((orig-buf (current-buffer))
+          (orig-win (selected-window)))
+      (funcall momo/geiser--orig-fontify start end)
+      (unless (eq (current-buffer) orig-buf)
+        (set-buffer orig-buf))
+      (unless (eq (selected-window) orig-win)
+        (select-window orig-win)))))
