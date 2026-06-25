@@ -22,7 +22,8 @@
                 (mapcar
                  (lambda (f)
                    (if (memq f '(geiser-capf--for-symbol
-                                 geiser-capf--for-module))
+                                 geiser-capf--for-module
+                                 geiser-kawa-capf))
                        (apply-partially
                         (lambda (fn &rest args)
                           (condition-case nil
@@ -36,3 +37,13 @@
 
 (use-package geiser-guile
   :after geiser)
+
+;; Phase 2: Prevent geiser's font-lock buffer from stealing focus.
+;; geiser-autodoc--str calls set-buffer on the font-lock buffer,
+;; which races with Corfu's child-frame popup during TCP completions.
+(with-eval-after-load 'geiser-autodoc
+  (advice-add 'geiser-autodoc--str :around
+    (lambda (orig &rest args)
+      (save-current-buffer
+        (save-window-excursion
+          (apply orig args))))))
