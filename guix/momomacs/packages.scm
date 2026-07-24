@@ -73,6 +73,7 @@
     "emacs-citeproc"           ;modules/org/citeproc.el
 
     ;; --- File handling ---
+    "emacs-openwith"           ;modules/defaults/openwith.el (media -> player)
     "emacs-pdf-tools"
     "emacs-visual-fill-column" ;modules/file-handling/visual-fill-column.el
     ;; "emacs-dirvish"  -- installed but NEVER loaded: `dirvish' is mapped in
