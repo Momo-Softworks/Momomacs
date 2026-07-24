@@ -43,7 +43,8 @@ Momomacs is also a *Guix channel*: its package set lives in the module
 (=manifest.scm= is a thin wrapper over the module):
 
 #+begin_src bash
-guix shell -m ~/.emacs.d/manifest.scm -- emacs
+# include emacs itself so EMACSLOADPATH covers the manifest's packages
+guix shell emacs -m ~/.emacs.d/manifest.scm -- emacs
 #+end_src
 
 *As a channel* — add to =~/.config/guix/channels.scm=, then =guix pull=:
