@@ -1,4 +1,4 @@
-;;; init.el --- Momomacs initialization -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;; Momomacs - A modular Emacs configuration
@@ -6,7 +6,9 @@
 
 ;;; Code:
 
-;; Load user configuration variables first (before elpaca needs them)
+;; Load user configuration variables first cs initia
+
+
 ;; NOTE: user-config.el contains only defcustom declarations and basic elisp,
 ;;       no package dependencies. Loaded here so use-guix is available in elpaca.el
 (load (expand-file-name "config/user-config" user-emacs-directory))
@@ -20,6 +22,7 @@
 ;; Load utilities (needed by other modules)
 (load (expand-file-name "modules/utils/loaders" user-emacs-directory))
 (load (expand-file-name "modules/utils/helpers" user-emacs-directory))
+(load (expand-file-name "modules/utils/eca-helpers" user-emacs-directory))
 
 ;; Load Guix integration if enabled
 (when momo-use-guix
@@ -49,47 +52,51 @@
 (elpaca-wait)
 
 ;; Now load the rest (these can defer as needed)
-   (momo/load-packages
-    '(;; Keybindings
-      meow
-      which-key
+(momo/load-packages
+ '(;; Keybindings
+   meow
+   which-key
       
-      ;; File handling
-      pdf-tools
-      visual-fill-column
-      shrface
-      dirvish
+   ;; File handling
+   pdf-tools
+   visual-fill-column
+   shrface
+   dirvish
       
-      ;; Programming
-      racket
-      geiser
-      kawa
-      java
-      flycheck
-      eca
-      rainbow-delimiters
-      parinfer-rust
+   ;; Programming
+   racket
+   geiser
+   arei
+   kawa
+   java
+   flycheck
+   eca
+   rainbow-delimiters
+   parinfer-rust
+   jinx
       
-      ;; Project management
-      projectile
-      magit
-      envrc
+   ;; Project management
+   projectile
+   magit
+   envrc
       
-      ;; Org-mode
-      org-modern
-      org-roam
-      org-fragtog
-      citeproc
+   ;; Org-mode
+   org-modern
+   org-roam
+   org-fragtog
+   citeproc
       
-      ;; Social
-      elfeed
+   ;; Social
+   elfeed
 
-      ;; Gaming
-      packwiz
+   ;; Gaming
+   packwiz
 
-      ;; System (uncomment if needed)
-      ;;exwm
-      ))
+   ;; System (uncomment if needed)
+   bluetooth
+   pinentry))
+   ;;exwm
+      
 
 ;; Wait for all remaining packages to be installed and configured
 (elpaca-wait)
@@ -99,8 +106,9 @@
 ;; EXWM_LAUNCH.  Gating on it keeps a normal Emacs and the emacs --fg-daemon
 ;; from ever calling (exwm-enable).
 (when (getenv "EXWM_LAUNCH")
-  (momo/load-packages '(exwm))
-  (elpaca-wait))
+  (momo/load-packages '(xdg-launcher exwm))
+  (elpaca-wait)
+  (server-start))
 
 ;; Apply theme
 (load-theme 'modus-vivendi-tinted t)

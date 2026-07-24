@@ -1,5 +1,31 @@
+(defun momo/meow-compat-setup ()
+  "Configure mode-specific defaults for Meow.
+
+The policy is:
+- editing buffers start modal (`normal')
+- external app/chat/terminal input starts pass-through-ish (`insert')
+- read-only UI buffers start navigational (`motion')
+- Dired keeps ranger-style local h/l navigation, so it starts in `motion'."
+  (dolist (entry '((conf-mode . normal)
+                   (prog-mode . normal)
+                   (text-mode . normal)
+                   (fundamental-mode . normal)
+                   (minibuffer-mode . insert)
+                   (eca-chat-mode . insert)
+                   (eat-mode . insert)
+                   (exwm-mode . insert)
+                   (dashboard-mode . motion)
+                   (dired-mode . motion)
+                   (dirvish-directory-view-mode . motion)
+                   (eww-mode . motion)
+                   (help-mode . motion)
+                   (messages-buffer-mode . motion)
+                   (special-mode . motion)))
+    (setf (alist-get (car entry) meow-mode-state-list) (cdr entry))))
+
 (defun meow-setup ()
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+  (momo/meow-compat-setup)
   (meow-motion-overwrite-define-key
    '("j" . meow-next)
    '("k" . meow-prev)
@@ -20,7 +46,19 @@
    '("9" . meow-digit-argument)
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
-   '("?" . meow-cheatsheet))
+   '("?" . meow-cheatsheet)
+   ;; Ergonomic aliases.  The existing C-c leaders remain available as
+   ;; fallbacks, and Meow's leader can still reach them as SPC m/o/n/c.
+   '("b" . consult-buffer)
+   '("m k" . packwiz-dispatch)
+   '("o c" . org-capture)
+   '("o r" . org-refile)
+   '("n f" . org-roam-node-find)
+   '("n c" . org-roam-capture)
+   '("n i" . org-roam-node-insert)
+   '("n j" . org-roam-dailies-capture-today)
+   '("c r" . momo/reload-config)
+   '("c o" . momo/open-config))
   (meow-normal-define-key
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)

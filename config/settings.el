@@ -58,6 +58,11 @@
             (when (string= (buffer-name) "*scratch*")
               (display-line-numbers-mode -1))))
 
+;; Automatically refresh buffers when files change on disk.
+(require 'autorevert)
+(setq auto-revert-verbose nil)
+(global-auto-revert-mode 1)
+
 ;; Show matching parentheses
 (setq show-paren-delay 0)
 (show-paren-mode 1)
