@@ -147,7 +147,8 @@
         emacs-shrface
         emacs-dired-hide-dotfiles
         emacs-eca
-        emacs-packwiz))
+        emacs-packwiz
+        emacs-guix-gold-theme))
 
 (define (momomacs-packages)
   "The Momomacs package set, resolved against the consumer's channels."

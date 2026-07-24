@@ -48,7 +48,8 @@ PACKAGE-LIST is an alist of (PACKAGE-SYMBOL . RELATIVE-PATH) pairs."
 						 (notifications . "system/notifications")
 						 (pinentry . "system/pinentry")
 						 (packwiz . "gaming/packwiz")
-						 (modus-themes . "UI/modus-themes"))))
+						 (modus-themes . "UI/modus-themes")
+						 (guix-gold . "UI/guix-gold"))))
 
 (defun momo/load-packages (packages)
   "Load configuration files for each package in PACKAGES list.

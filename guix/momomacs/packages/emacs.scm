@@ -8,6 +8,7 @@
 
 (define-module (momomacs packages emacs)
   #:use-module (guix packages)
+  #:use-module (guix gexp)                  ;local-file
   #:use-module (guix git-download)
   #:use-module (guix build-system emacs)
   #:use-module ((guix licenses) #:prefix license:)
@@ -17,7 +18,8 @@
             emacs-shrface
             emacs-dired-hide-dotfiles
             emacs-eca
-            emacs-packwiz))
+            emacs-packwiz
+            emacs-guix-gold-theme))
 
 (define emacs-language-detection
   (let ((commit "54a6ecf55304fba7d215ef38a4ec96daff2f35a4")
@@ -140,3 +142,28 @@ CurseForge/Modrinth/GitHub search, per-project catalogue triage, and a
 serve/install/launch test loop.  The packwiz binary itself is a separate
 package.")
       (license license:gpl3+))))
+
+;;; Guix Gold is not an upstream package: its source lives inside this very
+;;; repo (modules/UI/guix-gold/).  `local-file' with a relative name resolves
+;;; against this .scm file's directory, and since a Guix channel checkout is
+;;; the whole repository (only guix/ is the module search path), the theme
+;;; files are present for `guix pull' consumers too -- no separate repo or
+;;; commit hash to chase.
+(define emacs-guix-gold-theme
+  (package
+    (name "emacs-guix-gold-theme")
+    (version "0.1.0")
+    (source (local-file "../../../modules/UI/guix-gold"
+                        "emacs-guix-gold-theme-checkout"
+                        #:recursive? #t))
+    (build-system emacs-build-system)
+    (home-page "https://github.com/Momo-Softworks/Momomacs")
+    (synopsis "Warm gold-and-ember Emacs theme tuned for Scheme/Guix")
+    (description "Guix Gold is an accessible warm theme: gold keywords, ember
+builtins, periwinkle types and functions, pink constants, green strings, and
+crimson errors, over a soft brown background.  Syntax tokens meet a 7:1
+contrast ratio.  It ships a dark variant (@code{guix-gold}) and a light one
+(@code{guix-gold-light}) generated from a single shared face set, with
+comprehensive coverage of font-lock, magit/diff, org, markdown, the
+vertico/corfu/consult completion stack, geiser/racket, and the eca client.")
+    (license license:gpl3+)))

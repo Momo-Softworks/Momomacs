@@ -49,6 +49,7 @@
 (momo/load-packages
  '(doom-modeline
    modus-themes
+   guix-gold
    dashboard
    vertico
    corfu
@@ -117,8 +118,9 @@
   (elpaca-wait)
   (server-start))
 
-;; Apply theme
-(load-theme 'modus-vivendi-tinted t)
+;; Apply theme (Guix Gold — bundled in modules/UI/guix-gold/; Modus stays
+;; available as an alternative via `load-theme').
+(load-theme 'guix-gold t)
 
 ;; Load keybindings last (after all packages are configured)
 (load (expand-file-name "config/keybindings" user-emacs-directory))
