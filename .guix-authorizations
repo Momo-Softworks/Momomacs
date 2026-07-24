@@ -1,0 +1,8 @@
+;; Keys authorized to sign commits of the momomacs channel.  Every commit
+;; after the channel introduction must be signed by a key listed in its
+;; parent commit's copy of this file; the public keys live as .key files
+;; on the orphan `keyring' branch.
+(authorizations
+ (version 0)
+ (("989C 4DF6 BE60 E876 9E71  2001 7B98 B55D E129 2F08"
+   (name "samuel"))))
