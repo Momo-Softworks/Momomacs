@@ -1,0 +1,5 @@
+;; This repository doubles as a Guix channel; its Scheme modules live under
+;; guix/ (see "Package Modules in a Sub-directory" in the Guix manual).
+(channel
+  (version 0)
+  (directory "guix"))
