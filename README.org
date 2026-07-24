@@ -52,8 +52,17 @@ guix shell -m ~/.emacs.d/manifest.scm -- emacs
 (channel
   (name 'momomacs)
   (url "https://github.com/Momo-Softworks/Momomacs")
-  (branch "main"))
+  (branch "main")
+  (introduction
+   (make-channel-introduction
+    "5710608a5767728224abbdbf6c61bcc205a32aca"
+    (openpgp-fingerprint
+     "989C 4DF6 BE60 E876 9E71  2001 7B98 B55D E129 2F08"))))
 #+end_src
+
+The introduction lets =guix pull= authenticate the channel: every commit
+after it is signed by a key in =.guix-authorizations= (public keys on the
+=keyring= branch).
 
 and in a Guix Home configuration:
 
