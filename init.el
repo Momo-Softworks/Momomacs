@@ -13,6 +13,12 @@
 ;;       no package dependencies. Loaded here so use-guix is available in elpaca.el
 (load (expand-file-name "config/user-config" user-emacs-directory))
 
+;; Personal overlay, phase 1: variables that must exist before the package
+;; manager and modules load (machine specifics, feed lists, momo-* overrides).
+(let ((early (expand-file-name "early.el" momo-personal-dir)))
+  (when (file-exists-p early)
+    (load early)))
+
 ;; Initialize Elpaca package manager
 (load (expand-file-name "modules/utils/elpaca" user-emacs-directory))
 
@@ -101,10 +107,11 @@
 ;; Wait for all remaining packages to be installed and configured
 (elpaca-wait)
 
-;; EXWM is enabled only when Emacs is launched as the window manager — see
-;; ~/.local/bin/start-exwm (run by the exwm.desktop xsession), which exports
-;; EXWM_LAUNCH.  Gating on it keeps a normal Emacs and the emacs --fg-daemon
-;; from ever calling (exwm-enable).
+;; EXWM is enabled only when Emacs is launched as the window manager: the
+;; xsession entry point must export EXWM_LAUNCH (on Guix System, ~/.exwm does
+;; this before re-loading init.el; elsewhere see examples/exwm/start-exwm).
+;; Gating on it keeps a normal Emacs and the emacs --fg-daemon from ever
+;; calling (exwm-enable).
 (when (getenv "EXWM_LAUNCH")
   (momo/load-packages '(xdg-launcher exwm))
   (elpaca-wait)
@@ -115,6 +122,12 @@
 
 ;; Load keybindings last (after all packages are configured)
 (load (expand-file-name "config/keybindings" user-emacs-directory))
+
+;; Personal overlay, phase 2: final overrides (extra keybindings, theme
+;; tweaks) — loaded after every framework module has had its say.
+(let ((late (expand-file-name "late.el" momo-personal-dir)))
+  (when (file-exists-p late)
+    (load late)))
 
 ;; Display startup time
 (message "Momomacs loaded in %.2f seconds"

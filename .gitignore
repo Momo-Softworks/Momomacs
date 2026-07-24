@@ -29,3 +29,8 @@ tree-sitter/
 # Runtime caches & generated state
 url/
 packwiz-browse/
+elfeed/
+racket-mode/
+session.*
+*.elc
+.#*

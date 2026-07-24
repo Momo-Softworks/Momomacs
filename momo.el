@@ -20,5 +20,15 @@
             (load (file-name-sans-extension module))
           (error (warn "Failed to load optional module %s: %s" module-name err)))))))
 
+;; Personal overlay configs load the same way, after Momomacs' own, so a
+;; personal file can assume the framework's optional configs are present.
+(let ((personal-config (expand-file-name "config/" momo-personal-dir)))
+  (when (file-directory-p personal-config)
+    (dolist (module (directory-files personal-config t "\\`[^.].*\\.el\\'"))
+      (condition-case err
+          (load (file-name-sans-extension module))
+        (error (warn "Failed to load personal module %s: %s"
+                     (file-name-base module) err))))))
+
 (provide 'momo)
 ;;; momo.el ends here

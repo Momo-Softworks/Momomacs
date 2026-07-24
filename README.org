@@ -173,6 +173,23 @@ The configuration loads in this specific order to ensure dependencies are met:
 
 * Customization
 
+** Personal overlay
+
+Momomacs is a framework: anything personal (feed lists, machine hostnames,
+site-specific tooling, experiments) belongs in a separate overlay directory —
+=momo-personal-dir=, default =~/.config/momomacs/= — typically its own git
+repo.  If present, it is loaded in three phases:
+
+| File / dir      | Loaded                                          | Use for                                    |
+|-----------------+-------------------------------------------------+--------------------------------------------|
+| =early.el=      | before the package manager                      | =momo-*= variables, backend overrides      |
+| =config/*.el=   | with the optional configs (=momo.el= phase)     | personal features; prototyping new modules |
+| =late.el=       | last, after keybindings                         | final overrides                            |
+
+All files are optional; a missing overlay is fine.  Prototype candidate
+modules in the overlay's =config/=, then move them into the framework once
+they are generic.
+
 ** User Variables
 
 Edit ~config/user-config.el~ to customize these variables:

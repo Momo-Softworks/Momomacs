@@ -49,6 +49,21 @@ otherwise.  Override with the MOMO_USE_GUIX environment variable
   :type 'string
   :group 'momo)
 
+(defcustom momo-personal-dir
+  (expand-file-name "momomacs"
+                    (or (getenv "XDG_CONFIG_HOME")
+                        (concat (getenv "HOME") "/.config")))
+  "Personal overlay directory (typically its own git repo).
+Momomacs loads from it, when present, in three phases:
+  early.el     before the package manager (set variables like
+               `momo-use-guix', feed lists, machine specifics);
+  config/*.el  alongside Momomacs' own optional configs (see momo.el) —
+               also the place to prototype modules before promoting
+               them into the framework;
+  late.el      after everything else (final overrides)."
+  :type 'directory
+  :group 'momo)
+
 ;; Ensure directories exist
 (unless (file-directory-p momo-capture-directory)
   (make-directory momo-capture-directory 1))
