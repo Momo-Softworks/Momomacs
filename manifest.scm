@@ -37,6 +37,7 @@
    ;; --- Programming ---
    "emacs-geiser"             ;modules/programming/geiser.el
    "emacs-geiser-guile"       ;  ""
+   "emacs-arei"               ;modules/programming/arei.el
    "emacs-racket-mode"
    "emacs-flycheck"
    "emacs-rainbow-delimiters"
@@ -69,6 +70,10 @@
 
    ;; --- System / terminal ---
    "emacs-eat"
+   "emacs-exwm"
+   "emacs-xdg-launcher"
+   "emacs-bluetooth"
+   "emacs-pinentry"
 
    ;; --- TeX toolchain: org-fragtog + eww LaTeX math rendering ---
    ;; scheme-basic is too minimal for Org's preview preamble; these cover the
@@ -80,7 +85,17 @@
    "texlive-graphics"     ;graphicx + color
    "texlive-amsmath"
    "texlive-amsfonts"     ;amssymb
-   "texlive-ulem"))
+   "texlive-ulem"
+
+   ;; --- Flycheck linter backends ---
+   "jq"                    ;json-jq checker
+   "python-proselint"      ;proselint checker
+   "python-yamllint"       ;yaml-yamllint checker
+   "libxml2"               ;xml-xmllint checker
+
+   ;; --- Spell checking (jinx + enchant + hunspell) ---
+   "emacs-jinx"            ;async spell-checker
+   "hunspell-dict-en-us")) ;English (US) dictionary
 
 ;;; ---------------------------------------------------------------------------
 ;;; Referenced by the config but NOT packaged in Guix (current channels).
@@ -104,9 +119,8 @@
 ;;;      (propagates parinfer-rust-emacs, the Rust shared library)
 ;;;
 ;;; Conditional — only loaded for an EXWM session (init.el gates on
-;;; EXWM_LAUNCH).  AVAILABLE in Guix as "emacs-exwm" but pulls an X11 stack,
-;;; so left out by default; add it if you run the EXWM xsession:
-;;;   ;; "emacs-exwm"
+;;; EXWM_LAUNCH).  `emacs-exwm' is included above so the Guix profile can start
+;;; the EXWM xsession without falling back to Elpaca.
 ;;;
 ;;; Deliberately Elpaca-only (newer than Emacs ships; Guix's magit/doom-modeline
 ;;; bring their own as propagated inputs, so not needed here):
