@@ -16,6 +16,7 @@
 (define-module (momomacs packages)
   #:use-module (gnu packages)
   #:use-module (guix profiles)
+  #:use-module (momomacs packages emacs)  ;channel-local emacs packages
   #:export (%momomacs-package-specifications
             momomacs-packages
             momomacs-manifest))
@@ -112,18 +113,20 @@
     "hunspell-dict-en-us")) ;English (US) dictionary
 
 ;;; ---------------------------------------------------------------------------
-;;; Referenced by the config but NOT packaged in Guix (current channels).
-;;; In Guix mode these are NOT errors: guix.el auto-falls-back to Elpaca for
-;;; any package Guix/Emacs doesn't already provide.  Listed here only so they
-;;; stay tracked for eventual packaging in this channel, after which they'd
-;;; move up into the list proper:
+;;; Channel-local packages — needed by the config but absent from upstream
+;;; Guix, so this channel carries them in (momomacs packages emacs) and
+;;; appends them as variables below:
 ;;;
 ;;;   emacs-shrface           modules/file-handling/shrface.el
-;;;   emacs-eca               modules/programming/eca.el (uses a vendored
-;;;                           ~/.emacs.d/eca/eca binary regardless)
-;;;   emacs-elfeed-tube-mpv   modules/social/elfeed.el (companion to elfeed-tube)
+;;;                           (+ emacs-language-detection, its dependency)
+;;;   emacs-eca               modules/programming/eca.el (elisp client only;
+;;;                           the eca server binary is separate)
 ;;;   emacs-packwiz           modules/gaming/packwiz.el
 ;;;   emacs-dired-hide-dotfiles  modules/defaults/ (loaded unconditionally)
+;;;
+;;; NOT needed as a package: elfeed-tube-mpv ships inside upstream Guix's
+;;; `emacs-elfeed-tube' (which also propagates emacs-mpv), so the spec above
+;;; already covers modules/social/elfeed.el's use-package for it.
 ;;;
 ;;; Conditional — only loaded for an EXWM session (init.el gates on
 ;;; EXWM_LAUNCH).  `emacs-exwm' is included above so the Guix profile can start
@@ -133,9 +136,19 @@
 ;;; bring their own as propagated inputs, so not needed here):
 ;;;   f, transient, shrink-path   -- see modules/utils/elpaca.el
 
+(define %momomacs-channel-packages
+  ;; Variables, not specs: these exist only in this channel, so spec-string
+  ;; resolution against the consumer's channels cannot find them.
+  (list emacs-language-detection
+        emacs-shrface
+        emacs-dired-hide-dotfiles
+        emacs-eca
+        emacs-packwiz))
+
 (define (momomacs-packages)
   "The Momomacs package set, resolved against the consumer's channels."
-  (specifications->packages %momomacs-package-specifications))
+  (append (specifications->packages %momomacs-package-specifications)
+          %momomacs-channel-packages))
 
 (define (momomacs-manifest)
   "The Momomacs package set as a manifest, for guix shell/package -m."
