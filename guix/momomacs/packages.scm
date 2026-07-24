@@ -17,6 +17,7 @@
   #:use-module (gnu packages)
   #:use-module (guix profiles)
   #:use-module (momomacs packages emacs)  ;channel-local emacs packages
+  #:use-module (momomacs packages fonts)  ;channel-local fonts (Geist)
   #:export (%momomacs-package-specifications
             momomacs-packages
             momomacs-manifest))
@@ -148,7 +149,8 @@
         emacs-dired-hide-dotfiles
         emacs-eca
         emacs-packwiz
-        emacs-guix-gold-theme))
+        emacs-guix-gold-theme
+        font-geist))
 
 (define (momomacs-packages)
   "The Momomacs package set, resolved against the consumer's channels."

@@ -11,8 +11,26 @@
 (tool-bar-mode -1)    ; Disable tool bar
 (scroll-bar-mode -1)  ; Disable scroll bar
 
-;; Font settings
-(set-face-attribute 'default nil :height 120)
+;; Font settings — Geist Mono for code (default/fixed-pitch), Geist for prose
+;; (variable-pitch).  Both ship via the momomacs channel's `font-geist'
+;; package.  Each block is guarded on font availability so a machine without
+;; the package still starts cleanly (falling back to the height only).
+(defvar momo-mono-font "Geist Mono"
+  "Monospace family for the default and `fixed-pitch' faces.")
+(defvar momo-variable-font "Geist"
+  "Proportional family for the `variable-pitch' face.")
+(defvar momo-font-height 120
+  "Default face height, in 1/10 pt.")
+
+(set-face-attribute 'default nil :height momo-font-height)
+(when (find-font (font-spec :family momo-mono-font))
+  (set-face-attribute 'default nil :family momo-mono-font)
+  (set-face-attribute 'fixed-pitch nil :family momo-mono-font :height 1.0)
+  ;; new frames (daemon/EXWM) pick the font up too
+  (add-to-list 'default-frame-alist
+               (cons 'font (format "%s-%d" momo-mono-font (/ momo-font-height 10)))))
+(when (find-font (font-spec :family momo-variable-font))
+  (set-face-attribute 'variable-pitch nil :family momo-variable-font :height 1.0))
 
 ;; Line spacing
 (setq-default line-spacing 2)
