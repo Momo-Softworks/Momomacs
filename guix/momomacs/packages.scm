@@ -74,6 +74,7 @@
 
     ;; --- File handling ---
     "emacs-openwith"           ;modules/defaults/openwith.el (media -> player)
+    "mpv"                      ;  ""  the player openwith hands media to
     "emacs-pdf-tools"
     "emacs-visual-fill-column" ;modules/file-handling/visual-fill-column.el
     ;; "emacs-dirvish"  -- installed but NEVER loaded: `dirvish' is mapped in
