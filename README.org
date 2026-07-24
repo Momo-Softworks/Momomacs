@@ -32,6 +32,32 @@ On first launch, Emacs will automatically:
 
 *Note:* First startup may take 2-5 minutes while packages install.
 
+** Guix integration
+
+=manifest.scm= declares every Emacs package (and supporting tools) Momomacs
+uses, as a normal Guix manifest.  It works standalone:
+
+#+begin_src bash
+guix shell -m ~/.emacs.d/manifest.scm -- emacs
+#+end_src
+
+To fold it into a Guix Home profile instead, compose its entries into your
+=home-environment='s package list:
+
+#+begin_src scheme
+(use-modules (gnu packages) (guix profiles))
+
+(home-environment
+  (packages
+   (append (map manifest-entry-item
+                (manifest-entries (load "/home/USER/.emacs.d/manifest.scm")))
+           ;; ...your other packages...
+           )))
+#+end_src
+
+Packages Momomacs uses that Guix cannot provide are listed at the bottom of
+=manifest.scm= and are fetched by Elpaca at startup instead.
+
 * Project Structure
 ** config/
 User configuration files and utilities:
