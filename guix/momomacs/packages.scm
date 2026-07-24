@@ -88,6 +88,8 @@
     ;; --- System / terminal ---
     "emacs-eat"
     "emacs-exwm"
+    "emacs-ednc"               ;modules/system/notifications.el (D-Bus server)
+    "emacs-posframe"           ;  ""  toast rendering (also via vertico-posframe)
     "emacs-xdg-launcher"
     "emacs-bluetooth"
     "emacs-pinentry"

@@ -45,6 +45,7 @@ PACKAGE-LIST is an alist of (PACKAGE-SYMBOL . RELATIVE-PATH) pairs."
 						 (eat . "system/eat")
 						 (xdg-launcher . "system/xdg-launcher")
 						 (exwm . "system/exwm")
+						 (notifications . "system/notifications")
 						 (pinentry . "system/pinentry")
 						 (packwiz . "gaming/packwiz")
 						 (modus-themes . "UI/modus-themes"))))

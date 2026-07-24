@@ -113,7 +113,7 @@
 ;; Gating on it keeps a normal Emacs and the emacs --fg-daemon from ever
 ;; calling (exwm-enable).
 (when (getenv "EXWM_LAUNCH")
-  (momo/load-packages '(xdg-launcher exwm))
+  (momo/load-packages '(xdg-launcher exwm notifications))
   (elpaca-wait)
   (server-start))
 
