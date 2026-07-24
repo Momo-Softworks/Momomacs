@@ -34,29 +34,45 @@ On first launch, Emacs will automatically:
 
 ** Guix integration
 
-=manifest.scm= declares every Emacs package (and supporting tools) Momomacs
-uses, as a normal Guix manifest.  It works standalone:
+Momomacs is also a *Guix channel*: its package set lives in the module
+=(momomacs packages)= (under =guix/=), which exports
+=%momomacs-package-specifications=, =(momomacs-packages)=, and
+=(momomacs-manifest)=.  Three ways to consume it:
+
+*One-off shell* — works from a plain checkout, no channel setup
+(=manifest.scm= is a thin wrapper over the module):
 
 #+begin_src bash
 guix shell -m ~/.emacs.d/manifest.scm -- emacs
 #+end_src
 
-To fold it into a Guix Home profile instead, compose its entries into your
-=home-environment='s package list:
+*As a channel* — add to =~/.config/guix/channels.scm=, then =guix pull=:
 
 #+begin_src scheme
-(use-modules (gnu packages) (guix profiles))
-
-(home-environment
-  (packages
-   (append (map manifest-entry-item
-                (manifest-entries (load "/home/USER/.emacs.d/manifest.scm")))
-           ;; ...your other packages...
-           )))
+(channel
+  (name 'momomacs)
+  (url "https://github.com/Momo-Softworks/Momomacs")
+  (branch "main"))
 #+end_src
 
+and in a Guix Home configuration:
+
+#+begin_src scheme
+(use-modules (momomacs packages))
+
+(home-environment
+  (packages (append (momomacs-packages)
+                    ;; ...your other packages...
+                    )))
+#+end_src
+
+*From a live checkout* (the development loop — changes apply on the next
+reconfigure, no =guix pull=): instead of the channel entry, put
+=(add-to-load-path "/path/to/Momomacs/guix")= at the top of your config and
+use the same =(momomacs packages)= import.
+
 Packages Momomacs uses that Guix cannot provide are listed at the bottom of
-=manifest.scm= and are fetched by Elpaca at startup instead.
+=guix/momomacs/packages.scm= and are fetched by Elpaca at startup instead.
 
 * Project Structure
 ** config/
