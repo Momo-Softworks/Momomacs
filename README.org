@@ -217,12 +217,16 @@ they are generic.
 
 ** User Variables
 
-Edit ~config/user-config.el~ to customize these variables:
+Declared in ~config/user-config.el~; override them in your personal
+overlay's =early.el= (don't edit the framework file):
 
-- ~use-guix~ - Whether to use Guix package manager (default: ~nil~)
-- ~projects~ - List of project directories (default: ~'("~/Projects")~)
-- ~roam-directory~ - Location of org-roam notes (default: ~"~/Documents/Roam"~)
-- ~capture-directory~ - Location of org captures (default: ~"~/Documents/Org"~)
+- ~momo-use-guix~ - Use Guix as the package backend (default: auto-detected;
+  =t= on a Guix System with ~guix~ on PATH, else ~nil~ → Elpaca)
+- ~momo-projects~ - List of project directories (default: ~'("~/Projects")~)
+- ~momo-roam-directory~ - Org-roam notes (default: ~"~/Documents/Roam"~)
+- ~momo-capture-directory~ - Org captures (default: ~"~/Documents/Org"~)
+- ~momo-personal-dir~ - Personal overlay location (default:
+  ~"~/.config/momomacs"~)
 
 ** Adding a New Package
 
