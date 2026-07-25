@@ -31,6 +31,7 @@ url/
 packwiz-browse/
 elfeed/
 racket-mode/
+dirvish/
 session.*
 *.elc
 .#*

@@ -78,9 +78,24 @@
     "mpv"                      ;  ""  the player openwith hands media to
     "emacs-pdf-tools"
     "emacs-visual-fill-column" ;modules/file-handling/visual-fill-column.el
-    ;; "emacs-dirvish"  -- installed but NEVER loaded: `dirvish' is mapped in
-    ;; loaders.el's alist but not passed to any momo/load-packages call.  Wire
-    ;; it into init.el to use it, or leave it out.  Parked here until decided.
+    "emacs-dirvish"            ;modules/file-handling/dirvish.el — Dired UI and
+                               ;the XDG file picker; wired via init.el's
+                               ;`momo/load-packages'.  Its preview dispatchers
+                               ;shell out to the tools below: on Guix they come
+                               ;from here, on other distros install them.
+    ;; Dirvish preview helpers, keyed to its default dispatchers
+    ;; (video/image/gif/audio/epub/font/pdf) plus nicer directory listings and
+    ;; fast finding.  Without these, previews silently fall back to nothing.
+    "ffmpegthumbnailer"        ;video thumbnails
+    "poppler"                  ;pdftoppm/pdfinfo — PDF previews
+    "mediainfo"                ;audio / media metadata previews
+    "imagemagick"              ;convert — image, gif and font previews
+    "vips"                     ;vipsthumbnail — fast image thumbnails (dirvish
+                               ;prefers it over imagemagick when present)
+    "7zip"                     ;7z — dirvish archive previews (.zip/.tar/.rar/
+                               ;.iso/.7z + gzip/bzip2/xz tarballs)
+    "eza"                      ;directory-listing preview
+    "fd"                       ;dirvish-fd / fast file finding
 
     ;; --- Social ---
     "emacs-elfeed"
