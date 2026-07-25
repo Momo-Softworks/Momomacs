@@ -604,7 +604,7 @@
      `(eca-chat-task-progress-face ((t (:foreground ,type))))
      `(eca-chat-task-prefix-face ((t (:foreground ,fg-dim))))
      ;; misc chat
-     `(eca-chat-diff-view-face ((t (:inherit diff-refine-changed))))
+     `(eca-chat-diff-view-face ((t (:foreground ,chg-fg :underline t :weight bold))))
      `(eca-chat-elapsed-time-face ((t (:foreground ,fg-dim))))
      `(eca-chat-time-face ((t (:foreground ,fg-dim))))
      `(eca-chat-usage-string-face ((t (:foreground ,fg-dim))))
@@ -619,8 +619,12 @@
      `(eca-chat-question-option-face ((t (:foreground ,type))))
      `(eca-chat-option-key-face ((t (:foreground ,keyword :weight bold))))
      `(eca-chat-option-value-face ((t (:foreground ,fg))))
-     `(eca-chat-expandable-block-1-face ((t (:foreground ,fg-dim))))
-     `(eca-chat-expandable-block-2-face ((t (:foreground ,fg-dim))))
+     ;; Background-only: eca overlays these across whole expanded blocks and
+     ;; sets :background dynamically per theme.  A :foreground here would tint
+     ;; ALL block content (e.g. question options, Cancel) one flat color,
+     ;; clobbering the per-element font-lock faces underneath.
+     `(eca-chat-expandable-block-1-face ((t (:extend t))))
+     `(eca-chat-expandable-block-2-face ((t (:extend t))))
      `(eca-chat-trust-on-face ((t (:foreground ,string :weight bold))))
      `(eca-chat-trust-off-face ((t (:foreground ,error-c :weight bold))))
      ;; completion overlay / rewrite
