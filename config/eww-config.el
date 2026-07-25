@@ -1,20 +1,22 @@
 ;;; eww-config.el --- eww browser configuration -*- lexical-binding: t; -*-
 
 ;;; Commentary:
-;; Configuration for the built-in `eww' browser.  Two problems are solved
-;; here for math-heavy pages (e.g. Paul's Online Math Notes,
-;; tutorial.math.lamar.edu), which are opened from org links via C-c C-o:
+;; Configuration for the built-in `eww' browser, focused on reading long or
+;; math-heavy documentation comfortably:
 ;;
-;;   1. Long navigation sidebars: eww renders site navigation linearly
-;;      before the article, forcing a lot of scrolling.  We auto-apply
-;;      `eww-readable' (reader mode) for those URLs so only the article
-;;      body is shown.  `R' still toggles it manually anywhere.
+;;   1. Long navigation sidebars: `eww-readable' (reader mode, `R') strips
+;;      site chrome so only the article body shows.  Set `eww-readable-urls'
+;;      to auto-apply it for chosen sites.
 ;;
-;;   2. LaTeX not rendering: those pages typeset math with MathJax, which
-;;      is JavaScript and never runs in eww, so you see the raw source
-;;      (e.g. "\\({\\mathbb{R}^3}\\)").  We post-process the eww buffer and
-;;      replace each \\(..\\)/\\[..\\] fragment with an image rendered by the
-;;      same org LaTeX-preview pipeline already used for org buffers.
+;;   2. LaTeX not rendering: MathJax pages typeset math with JavaScript, which
+;;      eww never runs, so you see the raw source (e.g. "\\({\\mathbb{R}^3}\\)").
+;;      `momo/eww-render-math' (C-c C-l) replaces each \\(..\\)/\\[..\\] fragment
+;;      with an image from the org LaTeX-preview pipeline.  Set
+;;      `momo/eww-math-auto-url-regexp' to render automatically on chosen URLs.
+;;
+;; Site-specific readers (auto-render URLs, per-site DOM helpers) belong in a
+;; personal overlay; see Samuel's overlay `config/eww-config.el' for a worked
+;; example (Paul's Online Math Notes: auto-math + foldable "Show Solution").
 
 ;;; Code:
 
@@ -27,15 +29,6 @@
 
 ;; Use eww as the default browser for org-mode links and `browse-url'.
 (setq browse-url-browser-function #'eww-browse-url)
-
-
-;;;; Readable mode (strip navigation sidebars) -----------------------------
-
-(with-eval-after-load 'eww
-  ;; Auto-apply reader mode for these URLs.  Each entry is a regexp (or a
-  ;; (regexp . readability) cons).  `R' toggles readable mode manually.
-  (setq eww-readable-urls
-        '("\\`https?://tutorial\\.math\\.lamar\\.edu/")))
 
 
 ;;;; Reading experience ----------------------------------------------------
@@ -152,13 +145,12 @@ Useful when eww doesn't render a page well and you need the full browser."
 
 ;;;; LaTeX / MathJax rendering ---------------------------------------------
 
-(defcustom momo/eww-math-auto-url-regexp
-  "\\`https?://tutorial\\.math\\.lamar\\.edu/"
-  "Regexp of eww URLs whose LaTeX math is rendered automatically.
-For any page whose URL matches, math is rendered after the page loads.
-On other pages, render on demand with `momo/eww-render-math'
-\(bound to \\`C-c C-l' in eww buffers)."
-  :type 'regexp
+(defcustom momo/eww-math-auto-url-regexp nil
+  "Regexp of eww URLs whose LaTeX math is rendered automatically, or nil.
+When nil (the default) math is never auto-rendered; use `momo/eww-render-math'
+\(bound to \\`C-c C-l' in eww buffers) on demand.  Set this to a URL regexp
+\(typically in your overlay) to auto-render math on matching pages."
+  :type '(choice (const :tag "Never auto-render" nil) regexp)
   :group 'momo-eww)
 
 (defcustom momo/eww-math-process 'dvisvgm
@@ -262,139 +254,13 @@ LaTeX-preview pipeline.  Re-running refreshes the overlays."
 
 (defun momo/eww-render-math-maybe ()
   "Auto-render math when the eww URL matches `momo/eww-math-auto-url-regexp'.
-Intended for `eww-after-render-hook'."
+Intended for `eww-after-render-hook'.  No-op when the regexp is nil."
   (let ((url (eww-current-url)))
-    (when (and url (string-match-p momo/eww-math-auto-url-regexp url))
+    (when (and url momo/eww-math-auto-url-regexp
+               (string-match-p momo/eww-math-auto-url-regexp url))
       (momo/eww-render-math))))
 
 (add-hook 'eww-after-render-hook #'momo/eww-render-math-maybe)
-
-
-;;;; Foldable "Show Solution" sections (Paul's Online Math Notes) ----------
-
-;; Paul's Notes hides each worked-example solution behind a JavaScript
-;; "Show Solution" toggle: a <span class="soln-title"> ("Show Solution")
-;; followed by a <div class="soln-content"> (the answer).  eww runs no
-;; JavaScript, so the solutions are revealed immediately.  We detect those
-;; nodes by DOM class, hide the solution body by default, and make "Show
-;; Solution" a foldable toggle -- so you can attempt a problem first.
-
-(require 'text-property-search)
-
-(defconst momo/eww--soln-invisible 'momo-eww-soln
-  "Symbol used in `buffer-invisibility-spec' to hide eww solution bodies.")
-
-(defcustom momo/eww-hide-solutions t
-  "When non-nil, fold \"Show Solution\" sections in eww (hidden by default).
-Click or press RET/TAB on the \"Show Solution\" line to reveal a solution,
-or toggle them all with `momo/eww-toggle-all-solutions' (\\`C-c C-s')."
-  :type 'boolean
-  :group 'momo-eww)
-
-(defvar momo/eww-solution-toggle-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "RET") #'momo/eww-toggle-solution)
-    (define-key map (kbd "TAB") #'momo/eww-toggle-solution)
-    (define-key map [mouse-1] #'momo/eww-toggle-solution)
-    map)
-  "Keymap active on an eww \"Show Solution\" toggle.")
-
-;; --- Render-time tagging via shr (by DOM class) --------------------------
-
-(defun momo/shr-tag-div (dom)
-  "Render a <div>, tagging `soln-content' solution bodies for folding."
-  (if (string-match-p "soln-content" (or (dom-attr dom 'class) ""))
-      (let ((start (point)))
-        (shr-tag-div dom)
-        (put-text-property start (point) 'momo-eww-solution t))
-    (shr-tag-div dom)))
-
-(defun momo/shr-tag-span (dom)
-  "Render a <span>, tagging the `soln-title' (\"Show Solution\") toggle."
-  (let ((start (point)))
-    (shr-generic dom)
-    (when (string-match-p "soln-title" (or (dom-attr dom 'class) ""))
-      (put-text-property start (point) 'momo-eww-soln-toggle t))))
-
-(with-eval-after-load 'shr
-  (add-to-list 'shr-external-rendering-functions '(div . momo/shr-tag-div))
-  (add-to-list 'shr-external-rendering-functions '(span . momo/shr-tag-span)))
-
-;; --- Folding overlays (post-render) --------------------------------------
-
-(defun momo/eww--solution-arrow (hidden)
-  "Return the fold indicator string for a solution; HIDDEN selects which."
-  (propertize (if hidden "▸ " "▾ ") 'face 'shr-h5))
-
-(defun momo/eww--set-solution (body hidden)
-  "Show or hide the solution BODY overlay; HIDDEN non-nil hides it."
-  (overlay-put body 'invisible (and hidden momo/eww--soln-invisible))
-  (let ((tog (overlay-get body 'momo-eww-soln-toggle)))
-    (when tog
-      (overlay-put tog 'before-string (momo/eww--solution-arrow hidden)))))
-
-(defun momo/eww--fold-one-solution (beg end)
-  "Hide the solution body between BEG and END and wire up its toggle."
-  (let ((body (make-overlay beg end))
-        tbeg tend)
-    (save-excursion
-      (goto-char beg)
-      (let ((m (text-property-search-backward 'momo-eww-soln-toggle t t)))
-        (when m
-          (setq tbeg (prop-match-beginning m)
-                tend (prop-match-end m)))))
-    (overlay-put body 'momo-eww-soln-body t)
-    (overlay-put body 'evaporate t)
-    (when (and tbeg tend)
-      (let ((tog (make-overlay tbeg tend)))
-        (overlay-put tog 'momo-eww-soln-toggle-ov t)
-        (overlay-put tog 'momo-eww-soln-target body)
-        (overlay-put body 'momo-eww-soln-toggle tog)
-        (overlay-put tog 'keymap momo/eww-solution-toggle-map)
-        (overlay-put tog 'mouse-face 'highlight)
-        (overlay-put tog 'face 'link)
-        (overlay-put tog 'help-echo "mouse-1/RET: show or hide this solution")))
-    (momo/eww--set-solution body t)))
-
-(defun momo/eww-fold-solutions ()
-  "Hide \"Show Solution\" bodies in the current eww buffer.
-Intended for `eww-after-render-hook'."
-  (when momo/eww-hide-solutions
-    (add-to-invisibility-spec momo/eww--soln-invisible)
-    (let ((pos (point-min)))
-      (while (setq pos (text-property-any pos (point-max) 'momo-eww-solution t))
-        (let ((end (or (next-single-property-change pos 'momo-eww-solution)
-                       (point-max))))
-          (momo/eww--fold-one-solution pos end)
-          (setq pos end))))))
-
-(add-hook 'eww-after-render-hook #'momo/eww-fold-solutions)
-
-;; --- Commands ------------------------------------------------------------
-
-(defun momo/eww-toggle-solution (&optional event)
-  "Toggle the solution whose \"Show Solution\" toggle is at point or EVENT."
-  (interactive (list last-input-event))
-  (let* ((pos (if (and (consp event) (event-end event))
-                  (posn-point (event-end event))
-                (point)))
-         (tog (seq-find (lambda (o) (overlay-get o 'momo-eww-soln-toggle-ov))
-                        (overlays-at pos)))
-         (body (and tog (overlay-get tog 'momo-eww-soln-target))))
-    (if (not body)
-        (user-error "No solution toggle here")
-      (momo/eww--set-solution body (not (overlay-get body 'invisible))))))
-
-(defun momo/eww-toggle-all-solutions ()
-  "Reveal all solutions if any are hidden, otherwise hide them all."
-  (interactive)
-  (let* ((bodies (seq-filter (lambda (o) (overlay-get o 'momo-eww-soln-body))
-                             (overlays-in (point-min) (point-max))))
-         (any-hidden (seq-some (lambda (o) (overlay-get o 'invisible)) bodies)))
-    (if (null bodies)
-        (message "No solutions on this page")
-      (dolist (b bodies) (momo/eww--set-solution b (not any-hidden)))
-      (message "%s all solutions" (if any-hidden "Revealed" "Hid")))))
 
 
 ;;;; Keybindings ----------------------------------------------------------
@@ -403,8 +269,7 @@ Intended for `eww-after-render-hook'."
           (lambda ()
             (local-set-key (kbd "C-c C-b") #'momo/eww-open-in-system-browser)
             (local-set-key (kbd "C-c C-o") #'eww-open-file)
-            (local-set-key (kbd "C-c C-l") #'momo/eww-render-math)
-            (local-set-key (kbd "C-c C-s") #'momo/eww-toggle-all-solutions)))
+            (local-set-key (kbd "C-c C-l") #'momo/eww-render-math)))
 
 (provide 'eww-config)
 ;;; eww-config.el ends here
