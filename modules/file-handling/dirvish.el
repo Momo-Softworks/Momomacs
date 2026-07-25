@@ -1,5 +1,25 @@
 (use-package dirvish
   :after dired
+  :preface
+  ;; Make full-frame Dirvish (the preview-pane layout) the default entry point.
+  ;; `dired-jump' under `dirvish-override-dired-mode' only gives a single pane
+  ;; with point on the originating file; run it, then expand that session to the
+  ;; full-frame layout so C-x C-j lands on the file AND shows the preview.  A
+  ;; prefix arg keeps `dired-jump's other-window behavior (single pane, no
+  ;; full-frame takeover).
+  (defun momo/dirvish-jump (&optional other-window)
+    "Jump to the current file's directory in a full-frame Dirvish session.
+Like `dired-jump' but expands to the preview-pane layout.  With OTHER-WINDOW
+\(a prefix arg), jump in another window and leave it as a single pane."
+    (interactive "P")
+    (require 'dirvish)
+    (dired-jump other-window)
+    (when (and (not other-window)
+               (dirvish-curr)
+               (not (dv-curr-layout (dirvish-curr))))
+      (dirvish-layout-toggle)))
+  :bind (("C-x C-j" . momo/dirvish-jump)
+         ("C-x d"   . dirvish))
   :config
   (dirvish-override-dired-mode)
 
