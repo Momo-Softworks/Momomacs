@@ -2,7 +2,14 @@
 
 ;;; Commentary:
 ;; User-tunable EXWM settings that stay separate from the package module.
-;; This file is loaded early from `momo.el`, before the EXWM package itself.
+;; This file is loaded early from `momo.el', before the EXWM package itself.
+;;
+;; The values here are GENERIC starting points meant to work on any single-
+;; monitor machine — a place to begin, not a personal setup.  Machine-specific
+;; values (your exact monitor names/layout, preferred browser, per-workspace
+;; monitor mapping) belong in your personal overlay, which loads after this
+;; file and can simply `setq' these variables.  See Samuel's overlay
+;; `config/exwm-config.el' for a worked example.
 
 ;;; Code:
 
@@ -11,26 +18,24 @@
   :type 'integer
   :group 'momo)
 
-(defcustom momo-exwm-default-browser-command "librewolf"
-  "Browser command used by EXWM shortcuts."
+(defcustom momo-exwm-default-browser-command "firefox"
+  "Browser command used by EXWM shortcuts.
+Override in your overlay if you use a different browser."
   :type 'string
   :group 'momo)
 
-(defcustom momo-exwm-xrandr-command
-  (string-join
-   '("xrandr"
-     "--output eDP --off"
-     "--output DisplayPort-1 --primary --mode 1920x1080 --rate 100 --pos 0x0 --rotate normal --set TearFree on"
-     "--output DisplayPort-2 --mode 1920x1080 --rate 100 --right-of DisplayPort-1 --rotate normal --set TearFree on")
-   " ")
-  "Xrandr command applied by `exwm-randr-mode'."
+(defcustom momo-exwm-xrandr-command "xrandr --auto"
+  "Xrandr command applied by `exwm-randr-mode'.
+The default (`xrandr --auto') just enables connected outputs at their
+preferred modes, which is safe on any hardware.  For a fixed multi-monitor
+layout, override this in your overlay with the full `xrandr --output …' form."
   :type 'string
   :group 'momo)
 
-(defcustom momo-exwm-randr-workspace-monitor-plist
-  '(1 "DisplayPort-1" 2 "DisplayPort-1" 3 "DisplayPort-1" 4 "DisplayPort-1" 5 "DisplayPort-1"
-    6 "DisplayPort-2" 7 "DisplayPort-2" 8 "DisplayPort-2" 9 "DisplayPort-2" 0 "DisplayPort-2")
-  "Workspace-to-monitor mapping for EXWM RandR integration."
+(defcustom momo-exwm-randr-workspace-monitor-plist '()
+  "Workspace-to-monitor mapping for EXWM RandR integration.
+Empty by default (every workspace on the primary output).  Override in your
+overlay with a plist like (1 \"HDMI-1\" 2 \"HDMI-1\" 3 \"DP-1\" …)."
   :type '(repeat (choice integer string))
   :group 'momo)
 
@@ -40,27 +45,10 @@
         "xset r rate 200 60")
   "Shell commands run when EXWM finishes initializing.
 
-Commands that are unavailable are skipped by the EXWM module, so this list can
-safely contain optional X11 utilities that are not always installed."
+Commands whose program is unavailable are skipped by the EXWM module, so this
+list can safely contain optional X11 utilities that are not always installed."
   :type '(repeat string)
   :group 'momo)
-
-;; Apply the checked-in EXWM defaults even if stale values were persisted in a
-;; running session or custom state.
-(setq momo-exwm-xrandr-command
-      (string-join
-       '("xrandr"
-         "--output eDP --off"
-         "--output DisplayPort-1 --primary --mode 1920x1080 --rate 100 --pos 0x0 --rotate normal --set TearFree on"
-         "--output DisplayPort-2 --mode 1920x1080 --rate 100 --right-of DisplayPort-1 --rotate normal --set TearFree on")
-       " ")
-      momo-exwm-randr-workspace-monitor-plist
-      '(1 "DisplayPort-1" 2 "DisplayPort-1" 3 "DisplayPort-1" 4 "DisplayPort-1" 5 "DisplayPort-1"
-        6 "DisplayPort-2" 7 "DisplayPort-2" 8 "DisplayPort-2" 9 "DisplayPort-2" 0 "DisplayPort-2")
-      momo-exwm-init-commands
-      (list momo-exwm-xrandr-command
-            "xsetroot -cursor_name left_ptr"
-            "xset r rate 200 60"))
 
 (provide 'exwm-config)
 ;;; exwm-config.el ends here
