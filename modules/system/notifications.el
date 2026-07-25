@@ -45,6 +45,46 @@
 (defconst momo/ednc--toast-max-width 46
   "Maximum toast width in columns, so long bodies wrap instead of sprawl.")
 
+(defun momo/ednc--make-toast-input-transparent (frame)
+  "Make the ednc toast FRAME ignore all X11 pointer input.
+`no-accept-focus' prevents keyboard focus, but a normal mapped X window can
+still interrupt an application's active pointer grab (notably Moonlight's).
+An empty Shape input region keeps the toast visible while mouse events pass
+through it and, crucially, is installed before the frame is mapped."
+  (when (and (frame-live-p frame)
+             (equal (car-safe (frame-parameter frame 'posframe-buffer))
+                    momo/ednc--toast-buffer)
+             (bound-and-true-p exwm--connection))
+    (condition-case nil
+        (let* ((window-id (frame-parameter frame 'outer-window-id))
+               (xid (if (stringp window-id)
+                        (string-to-number
+                         window-id
+                         (if (string-prefix-p "0x" window-id) 16 10))
+                      window-id)))
+          (require 'xcb-shape)
+          (xcb:get-extension-data exwm--connection 'xcb:shape)
+          (xcb:+request
+           exwm--connection
+           (make-instance 'xcb:shape:Rectangles
+                          :operation xcb:shape:SO:Set
+                          :destination-kind xcb:shape:SK:Input
+                          :ordering xcb:ClipOrdering:Unsorted
+                          :destination-window xid
+                          :x-offset 0
+                          :y-offset 0
+                          :rectangles nil))
+          (xcb:flush exwm--connection))
+      (error nil))))
+
+;; `posframe-show' creates its frame hidden, then calls this internal function
+;; to map it.  Advising that boundary lets the empty input shape take effect on
+;; the very first notification, before mapping can disturb a pointer grab.
+(unless (advice-member-p #'momo/ednc--make-toast-input-transparent
+                         'posframe--make-frame-visible)
+  (advice-add 'posframe--make-frame-visible :before
+              #'momo/ednc--make-toast-input-transparent))
+
 (defun momo/ednc--refposhandler (&optional frame)
   "Absolute origin (X . Y) of the current EXWM workspace's monitor.
 This is what lets the toast land on the right monitor and float over
@@ -114,25 +154,30 @@ Padding comes from the frame's internal border, so none is added here."
           (erase-buffer)
           (insert text)
           (goto-char (point-min))))
-      (posframe-show
-       momo/ednc--toast-buffer
-       :poshandler #'momo/ednc--poshandler-top-right
-       :refposhandler #'momo/ednc--refposhandler
-       :background-color bg
-       :foreground-color (face-foreground 'default nil t)
-       :border-width momo/ednc--toast-border-width
-       :border-color (momo/ednc--border-color)
-       ;; Invisible inner border == uniform padding on every side.
-       :internal-border-width momo/ednc--toast-padding
-       :internal-border-color bg
-       :left-fringe 10 :right-fringe 10
-       :max-width momo/ednc--toast-max-width
-       :lines-truncate nil
-       :cursor nil
-       :accept-focus nil
-       :timeout momo/ednc--toast-timeout
-       :override-parameters '((no-accept-focus . t)
-                              (no-focus-on-map . t))))))
+      ;; Posframe normally warps the pointer away when it thinks the pointer
+      ;; overlaps a popup.  Its calculation does not account for our absolute
+      ;; EXWM refposhandler and sends the pointer to the monitor's top-right.
+      ;; The toast is X11 input-transparent, so no banishing is needed here.
+      (let ((posframe-mouse-banish-function #'ignore))
+        (posframe-show
+         momo/ednc--toast-buffer
+         :poshandler #'momo/ednc--poshandler-top-right
+         :refposhandler #'momo/ednc--refposhandler
+         :background-color bg
+         :foreground-color (face-foreground 'default nil t)
+         :border-width momo/ednc--toast-border-width
+         :border-color (momo/ednc--border-color)
+         ;; Invisible inner border == uniform padding on every side.
+         :internal-border-width momo/ednc--toast-padding
+         :internal-border-color bg
+         :left-fringe 10 :right-fringe 10
+         :max-width momo/ednc--toast-max-width
+         :lines-truncate nil
+         :cursor nil
+         :accept-focus nil
+         :timeout momo/ednc--toast-timeout
+         :override-parameters '((no-accept-focus . t)
+                                (no-focus-on-map . t)))))))
 
 (defun momo/ednc-hide-toast ()
   "Hide the toast frame."
