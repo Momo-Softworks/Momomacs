@@ -124,7 +124,10 @@
      `(mode-line-buffer-id ((t (:foreground ,fg :weight bold))))
 
      ;; ===== header line & tabs =====
-     `(header-line ((t (:background ,bg-soft :foreground ,fg :box nil))))
+     ;; Match the mode-line shade (bg-hl), a step lighter than the tab-line
+     ;; (bg-soft), so a stacked header-line reads as its own surface — e.g. eca's
+     ;; model/agent/variant/mcp bar vs. the tab strip above it.
+     `(header-line ((t (:background ,bg-hl :foreground ,fg :box nil))))
      `(header-line-highlight ((t (:foreground ,keyword))))
      `(tab-bar             ((t (:background ,bg-soft :foreground ,fg-dim :box nil))))
      `(tab-bar-tab         ((t (:background ,bg-hl :foreground ,keyword :weight bold :box nil))))
