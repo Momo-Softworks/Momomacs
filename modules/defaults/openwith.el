@@ -19,9 +19,17 @@
   :group 'momo)
 
 (defcustom momo-media-extensions
-  '("mp4" "webm" "mkv" "mov" "avi" "m4v" "flv" "gif"
+  '("mp4" "webm" "mkv" "mov" "avi" "m4v" "flv"
     "mp3" "m4a" "opus" "flac" "ogg" "wav")
-  "File extensions opened with `momo-media-player'."
+  "File extensions opened with `momo-media-player'.
+
+Deliberately excludes image formats.  openwith works by intercepting
+`insert-file-contents' for matching files (a \"\" `file-name-handler-alist'
+entry), so anything that reads a matching file's bytes hands it to the player.
+`gif' in particular is an image that `image-mode' re-reads on a timer to
+animate/refit — which fires openwith outside Dirvish's synchronous preview
+guard and spawns the player mid-browse.  Gifs animate fine in Emacs and Dirvish
+previews, so they are left to `image-mode'.  openwith is for video/audio."
   :type '(repeat string)
   :group 'momo)
 
