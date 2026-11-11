@@ -17,10 +17,16 @@
   ;; against Enchant on first use, so only turn it on when that module is
   ;; already built or a C compiler is around (stock Windows has neither,
   ;; and every buffer would otherwise error with "No C compiler found").
-  (if (or (locate-library (concat "jinx-mod" module-file-suffix))
-          (seq-some #'executable-find '("cc" "gcc" "clang")))
+  ;; On Windows the module also needs libenchant on the PATH Emacs was
+  ;; started with: Windows looks up DLLs there, and `setenv' can't change it.
+  (if (and (or (locate-library (concat "jinx-mod" module-file-suffix))
+               (seq-some #'executable-find '("cc" "gcc" "clang")))
+           (or (not (eq system-type 'windows-nt))
+               (locate-file "libenchant-2-2.dll"
+                            (parse-colon-path
+                             (getenv-internal "PATH" initial-environment)))))
       (global-jinx-mode 1)
-    (message "Jinx: no C compiler or prebuilt jinx-mod found; spell-checking is off")))
+    (message "Jinx: needs a C compiler and Enchant (on Windows, run the Momomacs installer); spell-checking is off")))
 
 (provide 'momo-jinx)
 ;;; jinx.el ends here

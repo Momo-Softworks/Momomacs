@@ -58,6 +58,14 @@
                (not (member dir exec-path)))
       (add-to-list 'exec-path dir)
       (setenv "PATH" (concat (convert-standard-filename dir)
-                             path-separator (getenv "PATH"))))))
+                             path-separator (getenv "PATH")))))
+  ;; MSYS2's UCRT64 toolchain (gcc, pkg-config, Enchant) lets Jinx build its
+  ;; spell-check module and find libenchant at runtime.  Append it so its
+  ;; Unix tools never shadow the Windows ones above.
+  (let ((ucrt (or (getenv "MOMO_MSYS2_UCRT64") "C:/msys64/ucrt64/bin")))
+    (when (and (file-directory-p ucrt) (not (member ucrt exec-path)))
+      (setq exec-path (append exec-path (list ucrt)))
+      (setenv "PATH" (concat (getenv "PATH") path-separator
+                             (convert-standard-filename ucrt))))))
 
 ;;; early-init.el ends here
