@@ -12,6 +12,16 @@
   ;; English is the default; add more codes for multilingual documents.
 ;;  (setq jinx-languages '("en_US"))
 
+  ;; Jinx guesses the language from the locale, which on Windows is a
+  ;; three-letter code like "ENU" that no dictionary matches.  Fall back to
+  ;; $LANG or en_US when the guess doesn't look like "en_US" / "de".
+  (unless (string-match-p "\\`[a-z][a-z]\\(_[A-Z][A-Z]\\)?\\( \\|\\'\\)" jinx-languages)
+    (setq-default jinx-languages
+                  (let ((lang (getenv "LANG")))
+                    (if (and lang (string-match "\\`[a-z][a-z]_[A-Z][A-Z]" lang))
+                        (match-string 0 lang)
+                      "en_US"))))
+
   ;; Enable globally — jinx activates in text/org/prog-mode buffers
   ;; automatically via global-jinx-mode.  Jinx compiles a small C module
   ;; against Enchant on first use, so only turn it on when that module is
