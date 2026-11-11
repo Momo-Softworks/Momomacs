@@ -46,4 +46,18 @@
     (add-to-list 'exec-path guix-bin)
     (setenv "PATH" (concat guix-bin path-separator (getenv "PATH")))))
 
+;; On Windows, programs started from the Start menu inherit Explorer's PATH,
+;; which stays stale until you sign out after installing Git or other tools.
+;; Add the usual install folders so Elpaca can find git (and ag etc.) anyway.
+(when (eq system-type 'windows-nt)
+  (dolist (dir (list (expand-file-name "Git/cmd" (getenv "ProgramFiles"))
+                     (and (getenv "LOCALAPPDATA")
+                          (expand-file-name "Microsoft/WinGet/Links"
+                                            (getenv "LOCALAPPDATA")))))
+    (when (and dir (file-directory-p dir)
+               (not (member dir exec-path)))
+      (add-to-list 'exec-path dir)
+      (setenv "PATH" (concat (convert-standard-filename dir)
+                             path-separator (getenv "PATH"))))))
+
 ;;; early-init.el ends here
