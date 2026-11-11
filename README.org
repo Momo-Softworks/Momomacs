@@ -34,22 +34,29 @@ On first launch, Emacs will automatically:
 
 ** Windows
 
-Install the tools with winget, then clone into =%APPDATA%\.emacs.d=
-(where Emacs looks when =HOME= is not set):
+Run the installer in PowerShell (no admin needed, apart from the
+prompts the Emacs, Git and MSYS2 installers show):
 
 #+begin_src powershell
-winget install GNU.Emacs Git.Git JFLarvoire.Ag
-git clone https://github.com/Momo-Softworks/Momomacs.git "$env:APPDATA\.emacs.d"
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/Momo-Softworks/Momomacs/main/scripts/install-windows.ps1)))
 #+end_src
 
-Then start GNU Emacs from the Start menu.  Notes:
+or double-click =scripts\install-windows.cmd= in a checkout.  It installs
+Emacs, Git and ag with winget, MSYS2 with gcc, Enchant and English
+dictionaries for spell-checking, and the icon font. It then clones
+Momomacs into =%APPDATA%\.emacs.d= (where Emacs looks when =HOME= is
+not set) and installs every package, so the first launch is quick.
+Running it again updates an existing install.  Options: =-NoSpellCheck=
+(skips the ~500 MB MSYS2 download), =-NoFont=, =-Dir=, =-Branch=.
+
+Then start Emacs from the Start menu.  Notes:
 - Elpaca copies package files instead of symlinking them, since Windows
   needs admin rights or Developer Mode for symlinks.
 - Org, Roam and Projects default to your profile folder
   (=C:\Users\NAME\Documents\Org= and so on), not =%APPDATA%=.
-- Spell-checking (Jinx) stays off unless a C compiler and Enchant are
-  installed, and pinentry is skipped because Emacs on Windows can't
-  open the Unix socket it uses.
+- Spell-checking (Jinx) uses MSYS2's =C:\msys64\ucrt64\bin=, which the
+  installer adds to your PATH; without it Jinx stays off.  pinentry is
+  skipped because Emacs on Windows can't open the Unix socket it uses.
 
 ** Guix integration
 

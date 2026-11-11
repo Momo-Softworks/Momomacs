@@ -27,6 +27,7 @@ geiser-history*
 eca/
 tree-sitter/
 parinfer-rust/
+install.log
 server/
 
 # Runtime caches & generated state
