@@ -1,7 +1,9 @@
 ;;; -*- lexical-binding: t; -*-
 (use-package flycheck
+  :defer t
+  ;; Turn on once Emacs is idle instead of during startup.
+  :init (run-with-idle-timer 1 nil #'global-flycheck-mode)
   :config
-  (add-hook 'after-init-hook #'global-flycheck-mode)
 
   ;; flycheck 36.0 (the latest -- identical in Guix and MELPA) ships an
   ;; `org-lint' checker that assumes each result's line is a number.  Org 9.7+

@@ -1,5 +1,6 @@
 ;;; -*- lexical-binding: t; -*-
 (use-package geiser
+  :defer t                              ; geiser-mode autoloads for Scheme buffers
   :custom
   (geiser-default-implementation 'guile)
   (geiser-active-implementations '(guile kawa))
