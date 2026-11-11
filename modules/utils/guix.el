@@ -50,5 +50,5 @@ from Guix and Elpaca skips it; otherwise pass the module's ENSURE through."
 
 (advice-add 'use-package-handler/:ensure :around #'momo/guix-skip-provided)
 
-(provide 'guix)
+(provide 'momo-guix)
 ;;; guix.el ends here

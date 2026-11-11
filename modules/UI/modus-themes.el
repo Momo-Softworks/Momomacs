@@ -16,5 +16,5 @@
                            (2 . (1.3))  ; Level 2 headings 1.3x size
                            (t . (1.1))))) ; Other headings 1.1x size
 
-(provide 'modus-themes)
+(provide 'momo-modus-themes)
 ;;; modus-themes.el ends here

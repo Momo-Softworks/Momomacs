@@ -25,6 +25,8 @@ geiser-history*
 # Local data/builds
 eca/
 tree-sitter/
+parinfer-rust/
+server/
 
 # Runtime caches & generated state
 url/

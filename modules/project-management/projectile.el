@@ -15,5 +15,5 @@
   (general-define-key :keymaps 'projectile-mode-map
 		      "C-c p" #'projectile-command-map))
 
-(provide 'projectile)
+(provide 'momo-projectile)
 ;;; projectile.el ends here

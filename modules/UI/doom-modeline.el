@@ -10,5 +10,5 @@
   :init
   (doom-modeline-mode 1))
 
-(provide 'doom-modeline)
+(provide 'momo-doom-modeline)
 ;;; doom-modeline.el ends here

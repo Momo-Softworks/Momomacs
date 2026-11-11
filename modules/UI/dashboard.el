@@ -24,5 +24,5 @@
               (with-current-buffer "*dashboard*"
                 (dashboard-refresh-buffer)))))
 
-(provide 'dashboard)
+(provide 'momo-dashboard)
 ;;; dashboard.el ends here

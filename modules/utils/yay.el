@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (add-to-list 'system-packages-supported-package-managers
              '(yay .
                       ((default-sudo . nil)

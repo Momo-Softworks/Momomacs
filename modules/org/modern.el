@@ -4,5 +4,5 @@
   :config
   (global-org-modern-mode))
 
-(provide 'modern)
+(provide 'momo-modern)
 ;;; modern.el ends here

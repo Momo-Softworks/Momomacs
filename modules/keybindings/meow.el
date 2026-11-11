@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (defun momo/meow-compat-setup ()
   "Configure mode-specific defaults for Meow.
 

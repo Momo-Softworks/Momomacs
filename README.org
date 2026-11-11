@@ -32,6 +32,25 @@ On first launch, Emacs will automatically:
 
 *Note:* First startup may take 2-5 minutes while packages install.
 
+** Windows
+
+Install the tools with winget, then clone into =%APPDATA%\.emacs.d=
+(where Emacs looks when =HOME= is not set):
+
+#+begin_src powershell
+winget install GNU.Emacs Git.Git JFLarvoire.Ag
+git clone https://github.com/Momo-Softworks/Momomacs.git "$env:APPDATA\.emacs.d"
+#+end_src
+
+Then start GNU Emacs from the Start menu.  Notes:
+- Elpaca copies package files instead of symlinking them, since Windows
+  needs admin rights or Developer Mode for symlinks.
+- Org, Roam and Projects default to your profile folder
+  (=C:\Users\NAME\Documents\Org= and so on), not =%APPDATA%=.
+- Spell-checking (Jinx) stays off unless a C compiler and Enchant are
+  installed, and pinentry is skipped because Emacs on Windows can't
+  open the Unix socket it uses.
+
 ** Guix integration
 
 Momomacs is also a *Guix channel*: its package set lives in the module

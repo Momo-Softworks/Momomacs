@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (use-package racket-mode
   :init
   ;; Let envrc/direnv's per-project PATH pick the racket (e.g. a project

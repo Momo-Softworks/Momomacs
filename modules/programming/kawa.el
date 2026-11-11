@@ -9,7 +9,7 @@
 
 ;;; Code:
 
-(defvar momo/geiser-kawa-dir (expand-file-name "~/Projects/geiser-kawa")
+(defvar momo/geiser-kawa-dir (expand-file-name "Projects/geiser-kawa" momo-user-home)
   "Root of the geiser-kawa checkout (Momo-Softworks fork).")
 
 (with-eval-after-load 'geiser

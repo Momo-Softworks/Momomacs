@@ -44,5 +44,5 @@ workspaces avoids the crash while preserving diagnostics for real projects."
     (advice-add 'eca-editor--flymake-diagnostics :around
                 #'momo/eca--flymake-diagnostics-guard)))
 
-(provide 'eca)
+(provide 'momo-eca)
 ;;; eca.el ends here

@@ -61,5 +61,5 @@
         result)))
   (advice-add 'corfu--make-frame :around #'momo/corfu--make-frame-around))
 
-(provide 'corfu)
+(provide 'momo-corfu)
 ;;; corfu.el ends here

@@ -122,5 +122,5 @@
   (exwm-randr-mode 1)
   (exwm-wm-mode 1))
 
-(provide 'exwm)
+(provide 'momo-exwm)
 ;;; exwm.el ends here

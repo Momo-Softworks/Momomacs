@@ -1,4 +1,4 @@
-;;; parinfer-rust.el — Parinfer minor mode via parinfer-rust
+;;; parinfer-rust.el — Parinfer minor mode via parinfer-rust -*- lexical-binding: t; -*-
 ;;;
 ;;; parinfer-rust-mode is a minor mode that automatically manages parentheses
 ;;; in Lisp code by inferring close-parens from indentation (indent/smart modes)
@@ -28,9 +28,30 @@
          (scheme-mode . parinfer-rust-mode)
          (racket-mode . parinfer-rust-mode))
   :init
-  ;; Never auto-download — the Guix package provides the library, and on
-  ;; non-Guix machines Elpaca + the default download works fine.
+  ;; Never auto-download — the Guix package provides the library.
   (setq parinfer-rust-auto-download nil)
+  ;; Without Guix, fetch the library ourselves.  The package's own download
+  ;; shells out to curl with an unquoted, unexpanded "~/..." path, which
+  ;; breaks on Windows and in any home folder with a space in its name.
+  (unless momo-use-guix
+    (let* ((lib-name (pcase system-type
+                       ('windows-nt "parinfer-rust-windows.dll")
+                       ('darwin "parinfer-rust-darwin.so")
+                       ((or 'gnu/berkeley 'berkeley-unix) "parinfer-rust-freebsd.so")
+                       (_ "parinfer-rust-linux.so")))
+           (dir (expand-file-name "parinfer-rust/" user-emacs-directory))
+           (lib (expand-file-name lib-name dir)))
+      (setq parinfer-rust-library-directory dir
+            parinfer-rust-library lib)
+      (unless (file-exists-p lib)
+        (condition-case err
+            (progn
+              (make-directory dir t)
+              (url-copy-file
+               (format "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.7/%s"
+                       lib-name)
+               lib))
+          (error (message "parinfer-rust: could not download %s: %s" lib-name err))))))
   ;; Skip the initial indentation check.  With the default 'defer setting,
   ;; parinfer can false-positive on unbalanced quotes inside comment blocks
   ;; and stall in a half-enabled state.  'nil means "just run, don't ask."
@@ -80,5 +101,5 @@
         ("C-c C-p d" . parinfer-rust-toggle-disable)
         ("<S-backspace>" . momo/parinfer-safe-kill-whole-line)))
 
-(provide 'parinfer-rust)
+(provide 'momo-parinfer-rust)
 ;;; parinfer-rust.el ends here

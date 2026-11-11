@@ -17,5 +17,5 @@
   (plist-put org-format-latex-options :foreground 'auto)
   (plist-put org-format-latex-options :background 'auto))
 
-(provide 'fragtog)
+(provide 'momo-fragtog)
 ;;; fragtog.el ends here

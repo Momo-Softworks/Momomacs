@@ -13,5 +13,5 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
-(provide 'orderless)
+(provide 'momo-orderless)
 ;;; orderless.el ends here

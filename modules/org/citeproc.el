@@ -16,5 +16,5 @@
   (setq org-cite-export-processors '((latex biblatex) (t basic)))
   )
 
-(provide 'citeproc)
+(provide 'momo-citeproc)
 ;;; citeproc.el ends here

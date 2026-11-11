@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (use-package dirvish
   :after dired
   :config

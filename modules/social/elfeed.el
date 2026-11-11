@@ -27,5 +27,5 @@
               ("C-c C-f" . elfeed-tube-mpv-follow-mode)
               ("C-c C-w" . elfeed-tube-mpv-where)))
 
-(provide 'elfeed)
+(provide 'momo-elfeed)
 ;;; elfeed.el ends here

@@ -5,9 +5,12 @@
 
 ;;; Code:
 
+;; pinentry talks to gpg-agent over a Unix socket, which Emacs on Windows
+;; can't open, so skip it where local sockets aren't supported.
 (use-package pinentry
+  :if (featurep 'make-network-process '(:family local))
   :config
   (pinentry-start))
 
-(provide 'pinentry)
+(provide 'momo-pinentry)
 ;;; pinentry.el ends here

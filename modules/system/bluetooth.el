@@ -20,5 +20,5 @@
   (with-eval-after-load 'exwm
     (add-hook 'exwm-init-hook #'momo/bluetooth-init-for-exwm)))
 
-(provide 'bluetooth)
+(provide 'momo-bluetooth)
 ;;; bluetooth.el ends here

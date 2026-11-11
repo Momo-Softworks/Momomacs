@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 (use-package geiser
   :custom
   (geiser-default-implementation 'guile)

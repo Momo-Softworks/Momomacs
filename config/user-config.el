@@ -34,25 +34,44 @@ otherwise.  Override with the MOMO_USE_GUIX environment variable
   :type 'boolean
   :group 'momo)
 
-(defcustom momo-projects (list (concat (getenv "HOME") "/Projects"))
+(defconst momo-user-home
+  (file-name-as-directory
+   (or (and (eq system-type 'windows-nt) (getenv "USERPROFILE"))
+       (getenv "HOME")
+       (expand-file-name "~")))
+  "The user's home folder, used as the base for the default paths below.
+On Windows Emacs sets HOME to %APPDATA% when it is unset, so use the
+real profile folder (C:\\Users\\NAME) there instead.")
+
+(defcustom momo-projects (list (expand-file-name "Projects" momo-user-home))
   "Location of your projects"
   :type 'list
   :group 'momo)
 
-(defcustom momo-roam-directory (concat (getenv "HOME") "/Documents/Roam")
+(defcustom momo-roam-directory (expand-file-name "Documents/Roam" momo-user-home)
   "Location of your org-roam"
   :type 'string
   :group 'momo)
 
-(defcustom momo-capture-directory (concat (getenv "HOME") "/Documents/Org")
+(defcustom momo-capture-directory (expand-file-name "Documents/Org" momo-user-home)
   "Location of your org captures"
   :type 'string
+  :group 'momo)
+
+(defcustom momo-rss-feeds '()
+  "Feed URLs added to `elfeed-feeds'.  Set it in your personal early.el."
+  :type '(repeat string)
+  :group 'momo)
+
+(defcustom momo-youtube-channel-urls '()
+  "YouTube channel handles (without the @) to follow in elfeed."
+  :type '(repeat string)
   :group 'momo)
 
 (defcustom momo-personal-dir
   (expand-file-name "momomacs"
                     (or (getenv "XDG_CONFIG_HOME")
-                        (concat (getenv "HOME") "/.config")))
+                        (expand-file-name ".config" momo-user-home)))
   "Personal overlay directory (typically its own git repo).
 Momomacs loads from it, when present, in three phases:
   early.el     before the package manager (set variables like

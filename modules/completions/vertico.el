@@ -66,5 +66,5 @@
     (set-face-attribute 'vertico-posframe-border nil :background "#5866a0"))
   (vertico-posframe-mode 1))
 
-(provide 'vertico)
+(provide 'momo-vertico)
 ;;; vertico.el ends here
