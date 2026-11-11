@@ -10,6 +10,7 @@ eln-cache/
 history
 transient/history.el
 recentf
+recentf.eld
 savehist
 tramp
 projectile-bookmarks.eld
