@@ -40,7 +40,7 @@
 (setq org-capture-templates
       `(("t" "Todo" entry (file+headline ,(concat momo-capture-directory "/GTD/tasks.org") "Tasks")
          "* TODO %?\n  %i\n  %a")
-        ("j" "Journal" entry (file+datetree ,(concat momo-capture-directory "/GTD/journal.org"))
+        ("j" "Journal" entry (file+olp+datetree ,(concat momo-capture-directory "/GTD/journal.org"))
          "* %?\nEntered on %U\n  %i\n  %a")
 	("i" "Idea" entry (file ,(concat momo-capture-directory "/ideas.org"))
          "* %?\n")

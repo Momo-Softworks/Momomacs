@@ -147,7 +147,7 @@ Reads project-local variables from `.dir-locals.el' via
                 (_ (user-error "Unknown momo/repl-backend: %S" backend))))
          (geiser-socket (or (momo/project-repl--dir-local 'momo/geiser-repl-socket)
                             (momo/project-repl--dir-local 'momo/repl-socket)))
-         (project-root (when-let ((project (project-current)))
+         (project-root (when-let* ((project (project-current)))
                          (project-root project)))
          (arei-port-file-raw (or (momo/project-repl--dir-local 'momo/arei-repl-port-file)
                                  ".nrepl-port"))

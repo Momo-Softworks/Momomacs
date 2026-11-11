@@ -444,7 +444,7 @@ Examples: \"+work-TODO\" \"+computer|+phone\" \"LEVEL=2\""
         ("org-roam" . ,(if (featurep 'org-roam) "loaded" "not loaded"))
         ("jinx" . ,(if (featurep 'jinx) "loaded" "not loaded"))
         ("exwm" . ,(if (getenv "EXWM_LAUNCH") "active (WM session)" "inactive"))
-        ("project-root" . ,(or (when-let ((proj (project-current)))
+        ("project-root" . ,(or (when-let* ((proj (project-current)))
                                  (project-root proj))
                                "(not in a project)")))))))
 
@@ -452,7 +452,7 @@ Examples: \"+work-TODO\" \"+computer|+phone\" \"LEVEL=2\""
   "Return info about the current project."
   (momo/ec--safe
    (lambda ()
-     (if-let ((proj (project-current)))
+     (if-let* ((proj (project-current)))
          (let ((root (project-root proj))
                (files (project-files proj)))
            (format "root: %s\nfiles: %d\n\n%s"
@@ -474,7 +474,7 @@ Examples: \"+work-TODO\" \"+computer|+phone\" \"LEVEL=2\""
   "Return a brief git status for the current project."
   (momo/ec--safe
    (lambda ()
-     (let ((default-directory (or (when-let ((proj (project-current)))
+     (let ((default-directory (or (when-let* ((proj (project-current)))
                                     (project-root proj))
                                   default-directory)))
        (with-temp-buffer
@@ -490,7 +490,7 @@ Examples: \"+work-TODO\" \"+computer|+phone\" \"LEVEL=2\""
   (momo/ec--safe
    (lambda ()
      (let ((default-directory (or dir
-                                  (when-let ((proj (project-current)))
+                                  (when-let* ((proj (project-current)))
                                     (project-root proj))
                                   default-directory)))
        (with-temp-buffer
