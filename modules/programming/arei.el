@@ -8,6 +8,11 @@
 ;;; Code:
 
 (use-package arei
+  ;; Not on MELPA; Guix users get it from the manifest instead (guix.el
+  ;; skips this recipe when the package is already on the load-path).
+  ;; Without a recipe Elpaca fails it on every start and keeps its log
+  ;; window open, which made startup several seconds slower.
+  :ensure (arei :repo "https://git.sr.ht/~abcdw/emacs-arei")
   :commands (arei arei-mode global-arei-mode)
   :hook (scheme-mode . arei-mode)
   :custom

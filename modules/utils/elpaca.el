@@ -78,6 +78,23 @@
 (when (eq system-type 'windows-nt)
   (elpaca-no-symlink-mode))
 
+;; Only open the *elpaca-log* window at startup when something really needs
+;; building.  Elpaca's own check trusts a "built" flag that `elpaca-wait'
+;; clears, so with our several waits the log opened on every start; Elpaca
+;; then redraws it after each of its ~500 startup events, which cost ~4 s.
+(defun momo/elpaca-log-initial-queues ()
+  "Like `elpaca-log-initial-queues', but check the build dirs on disk."
+  (unless elpaca-after-init-time
+    (cl-loop for (_ . e) in (elpaca--queued)
+             for dir = (elpaca<-build-dir e)
+             for query = (cond ((eq (elpaca<-status e) 'failed) "#unique | failed")
+                               ((not (and dir (file-exists-p dir))) "#unique | !finished"))
+             when query return query)))
+(with-eval-after-load 'elpaca
+  (setq elpaca-log-functions
+        (cons #'momo/elpaca-log-initial-queues
+              (remq 'elpaca-log-initial-queues elpaca-log-functions))))
+
 (elpaca `(,@elpaca-order))
 
 (elpaca elpaca-use-package
