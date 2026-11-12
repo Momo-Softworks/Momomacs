@@ -123,8 +123,18 @@ The policy is:
    '("'" . repeat)
    '("<escape>" . ignore)))
 
+(defun momo/meow-real-terminal-p (&rest _)
+  "Return non-nil unless the selected frame is on the daemon's initial terminal.
+Under `emacs --daemon' Meow sees that invisible terminal at startup and
+exit and writes cursor-shape escape codes to it.  On Windows nothing
+reads that output, so the write blocks and the daemon hangs on exit."
+  (or (display-graphic-p)
+      (not (equal (terminal-name) "initial_terminal"))))
+
 (use-package meow
   :config
+  (advice-add 'meow--on-exit :before-while #'momo/meow-real-terminal-p)
+  (advice-add 'meow--set-cursor-type :before-while #'momo/meow-real-terminal-p)
   (meow-setup)
   (meow-global-mode 1)
   (setq meow-use-clipboard 1))
