@@ -47,9 +47,15 @@ dictionaries for spell-checking, and the icon font. It then clones
 Momomacs into =%APPDATA%\.emacs.d= (where Emacs looks when =HOME= is
 not set) and installs every package, so the first launch is quick.
 Running it again updates an existing install.  Options: =-NoSpellCheck=
-(skips the ~500 MB MSYS2 download), =-NoFont=, =-Dir=, =-Branch=.
+(skips the ~500 MB MSYS2 download), =-NoFont=, =-NoServer=, =-Dir=,
+=-Branch=.
 
-Then start Emacs from the Start menu.  Notes:
+Then start Emacs from the Start menu.  The installer sets up an Emacs
+server: it starts at login, and the Start menu "Emacs" entry opens an
+=emacsclient= frame on it (starting the server first if needed), so new
+windows open instantly.  "Emacs (no server)" starts a separate Emacs;
+=-NoServer= skips all of this.  For Caps Lock as Esc on tap and Ctrl on
+hold, see =examples/caps-esc-ctrl/=.  Notes:
 - Elpaca copies package files instead of symlinking them, since Windows
   needs admin rights or Developer Mode for symlinks.
 - Org, Roam and Projects default to your profile folder

@@ -25,6 +25,11 @@
 
 .PARAMETER NoFont
   Skip installing the Symbols Nerd Font Mono icon font.
+
+.PARAMETER NoServer
+  Leave the Start menu "Emacs" entry starting a separate Emacs each time.
+  By default it opens a frame on an Emacs server (emacsclient), the server
+  starts at login, and an "Emacs (no server)" entry is added.
 #>
 [CmdletBinding()]
 param(
@@ -32,7 +37,8 @@ param(
     [string]$Branch = 'main',
     [string]$Repo = 'https://github.com/Momo-Softworks/Momomacs.git',
     [switch]$NoSpellCheck,
-    [switch]$NoFont
+    [switch]$NoFont,
+    [switch]$NoServer
 )
 
 $ErrorActionPreference = 'Stop'
@@ -183,6 +189,58 @@ if (-not ($out -match 'MOMOMACS-INSTALL-OK')) {
     throw "Package install did not finish. Full log: $log"
 }
 Info "Done. Log: $log"
+
+# --- 6. Emacs server ----------------------------------------------------------
+if (-not $NoServer) {
+    Step 'Making the Start menu "Emacs" open a frame on an Emacs server'
+    $bin = Split-Path $emacs
+    $client = Join-Path $bin 'emacsclientw.exe'
+    $runemacs = Join-Path $bin 'runemacs.exe'
+    $icon = "$(Join-Path $bin 'emacs.exe'),0"
+    $shell = New-Object -ComObject WScript.Shell
+    function Set-Shortcut($path, $target, $arguments, $description) {
+        New-Item -ItemType Directory -Force -Path (Split-Path $path) | Out-Null
+        $l = $shell.CreateShortcut($path)
+        $l.TargetPath = $target
+        $l.Arguments = $arguments
+        $l.WorkingDirectory = $env:USERPROFILE
+        $l.IconLocation = $icon
+        $l.Description = $description
+        $l.Save()
+        Info "Wrote $path"
+    }
+    $userMenu = [Environment]::GetFolderPath('Programs')
+    $menus = @($userMenu, [Environment]::GetFolderPath('CommonPrograms'))
+    # The Emacs installer's own "Emacs" shortcut, per-user or for all users.
+    $existing = $menus | ForEach-Object {
+        Get-ChildItem $_ -Recurse -Filter 'Emacs.lnk' -ErrorAction SilentlyContinue
+    } | Where-Object { $shell.CreateShortcut($_.FullName).TargetPath -match '\\(run)?emacs(client)?w?\.exe$' }
+    $done = $false
+    foreach ($lnk in $existing) {
+        try {
+            # -a "" starts the server first if it is not running.
+            Set-Shortcut $lnk.FullName $client '-n -c -a ""' 'Open a frame on the Emacs server'
+            Set-Shortcut (Join-Path $lnk.DirectoryName 'Emacs (no server).lnk') $runemacs '' 'Start a separate Emacs'
+            $done = $true
+        } catch {
+            Info "Could not change $($lnk.FullName) (it needs admin rights)."
+        }
+    }
+    if (-not $done) {
+        Set-Shortcut (Join-Path $userMenu 'Emacs.lnk') $client '-n -c -a ""' 'Open a frame on the Emacs server'
+        Set-Shortcut (Join-Path $userMenu 'Emacs (no server).lnk') $runemacs '' 'Start a separate Emacs'
+    }
+    Set-Shortcut (Join-Path ([Environment]::GetFolderPath('Startup')) 'Emacs server.lnk') `
+        $runemacs '--daemon' 'Start the Emacs server at login'
+    $daemon = Get-CimInstance Win32_Process -Filter "Name='emacs.exe'" |
+        Where-Object { $_.CommandLine -match '--(bg-|fg-)?daemon' }
+    if ($daemon) {
+        Info 'The Emacs server is already running; restart it to pick up this update.'
+    } else {
+        Start-Process $runemacs -ArgumentList '--daemon'
+        Info 'Started the Emacs server.'
+    }
+}
 
 Step 'Momomacs is installed'
 Info 'Open "Emacs" from the Start menu.'
